@@ -568,7 +568,7 @@ let localLog = JSON.parse(localStorage.getItem('habea_log')||'{}');
 // ── state ──
 let tasag="", active=0;
 let curDate=new Date(); curDate.setHours(0,0,0,0);
-let state=ITEMS.map(()=>({done:false,vio:"",vworker:"",form:false,draft:""}));
+let state=ITEMS.map(()=>({done:false,vio:"",vworker:"",vfixed:false,vfixnote:"",form:false,draft:""}));
 
 function dateKey(d){return d.toISOString().slice(0,10)}
 function todayKey(){const t=new Date();t.setHours(0,0,0,0);return dateKey(t)}
@@ -612,8 +612,8 @@ async function loadFromSheets(d){
     if(res.found){
       tasag=res.tasag||"";
       document.getElementById('inp-worker').value=res.worker||"";
-      state=ITEMS.map((_,i)=>({done:res.state[i]?.done||false,vio:res.state[i]?.vio||"",vworker:res.state[i]?.vworker||"",form:false,draft:""}));
-      localLog[k]={tasag,worker:res.worker||"",state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||''}))};
+      state=ITEMS.map((_,i)=>({done:res.state[i]?.done||false,vio:res.state[i]?.vio||"",vworker:res.state[i]?.vworker||"",vfixed:res.state[i]?.vfixed||false,vfixnote:res.state[i]?.vfixnote||"",form:false,draft:""}));
+      localLog[k]={tasag,worker:res.worker||"",state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||'',vfixed:s.vfixed||false,vfixnote:s.vfixnote||''}))};
       localStorage.setItem('habea_log',JSON.stringify(localLog));
       setSyncBadge('ok','Sheets-с уншлаа');
     } else {
@@ -631,7 +631,7 @@ function loadFromLocal(d){
   if(saved){
     tasag=saved.tasag||"";
     document.getElementById('inp-worker').value=saved.worker||"";
-    state=ITEMS.map((_,i)=>({done:saved.state[i]?.done||false,vio:saved.state[i]?.vio||"",vworker:saved.state[i]?.vworker||"",form:false,draft:""}));
+    state=ITEMS.map((_,i)=>({done:saved.state[i]?.done||false,vio:saved.state[i]?.vio||"",vworker:saved.state[i]?.vworker||"",vfixed:saved.state[i]?.vfixed||false,vfixnote:saved.state[i]?.vfixnote||"",form:false,draft:""}));
   } else {
     tasag=""; document.getElementById('inp-worker').value="";
     state=ITEMS.map(()=>({done:false,vio:"",form:false,draft:""}));
@@ -643,7 +643,7 @@ async function saveDay(){
   btn.disabled=true; btn.textContent='…';
   const k=dateKey(curDate);
   const worker=document.getElementById('inp-worker').value||"";
-  const payload={action:'save',dateKey:k,tasag,worker,state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||''}))};
+  const payload={action:'save',dateKey:k,tasag,worker,state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||'',vfixed:s.vfixed||false,vfixnote:s.vfixnote||''}))};
   // always save locally first
   localLog[k]={tasag,worker,state:payload.state,savedAt:new Date().toISOString()};
   localStorage.setItem('habea_log',JSON.stringify(localLog));
@@ -733,15 +733,30 @@ function render(){
         <span class="ck-txt">${ITEMS[i]}</span>
         <button class="vio-btn" onclick="openForm(${i})">⚠ Зөрчил</button>
       </div>
-      ${s.vio?`<div class="vio-tag">🔴 ${s.vio}${s.vworker?` · 👤 ${s.vworker}`:''}</div>`:''}
+      ${s.vio?`<div class="vio-tag" style="background:${s.vfixed?'var(--grn-l)':' var(--red-l)'};color:${s.vfixed?'var(--grn-d)':' var(--red-d)'};">${s.vfixed?'✅':'🔴'} ${s.vio}${s.vworker?` · 👤 ${s.vworker}`:''}${s.vfixed&&s.vfixnote?` · ✔ ${s.vfixnote}`:''}</div>`:''}
       ${s.form?`<div class="vio-form">
-        <textarea id="vf-${i}" rows="2" placeholder="Зөрчлийн дэлгэрэнгүй тайлбар...">${s.draft}</textarea>
-        <input id="vfw-${i}" type="text" value="${s.vworker||''}" placeholder="Зөрчил гаргасан ажилтны нэр..."
-          style="width:100%;font-size:12px;padding:6px 9px;border:0.5px solid var(--bdr);border-radius:6px;
-          background:var(--surf);color:var(--ink);outline:none;margin-top:6px;box-sizing:border-box"
+        <div style="font-size:11px;font-weight:600;color:var(--mut);margin-bottom:4px">Зөрчлийн тайлбар</div>
+        <textarea id="vf-${i}" rows="2" placeholder="Дэлгэрэнгүй тайлбар..."
+          style="width:100%;font-size:12px;padding:7px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);font-family:inherit;resize:none;outline:none;box-sizing:border-box"
+          onfocus="this.style.borderColor='var(--blue-m)'" onblur="this.style.borderColor='var(--bdr)'">${s.draft}</textarea>
+        <div style="font-size:11px;font-weight:600;color:var(--mut);margin:7px 0 4px">Зөрчил гаргасан ажилтны нэр</div>
+        <input id="vfw-${i}" type="text" value="${s.vworker||''}" placeholder="Ажилтны нэр..."
+          style="width:100%;font-size:12px;padding:6px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);outline:none;box-sizing:border-box"
           onfocus="this.style.borderColor='var(--blue-m)'" onblur="this.style.borderColor='var(--bdr)'"/>
-        <div style="font-size:11px;color:var(--mut);font-style:italic;margin-top:3px">* нэр бичих шаардлагагүй</div>
-        <div class="vf-btns">
+        <div style="height:1px;background:var(--bdr);margin:10px 0"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:${s.vfixed?'8px':'0'}">
+          <div onclick="toggleFixed(${i})" style="width:22px;height:22px;min-width:22px;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;border:1.5px solid ${s.vfixed?'var(--grn)':'var(--bdr2)'};background:${s.vfixed?'var(--grn)':'var(--surf)'}">
+            ${s.vfixed?'<svg width="13" height="13" viewBox="0 0 13 13"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
+          </div>
+          <span style="font-size:13px;font-weight:600;color:${s.vfixed?'var(--grn)':'var(--ink)'}">Зөрчил арилгасан</span>
+        </div>
+        ${s.vfixed?`
+        <div style="font-size:11px;font-weight:600;color:var(--mut);margin-bottom:4px">Арилгасан тэмдэглэл</div>
+        <input id="vfn-${i}" type="text" value="${s.vfixnote||''}" placeholder="Хэн, хэзээ, яаж арилгасан..."
+          style="width:100%;font-size:12px;padding:6px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);outline:none;box-sizing:border-box"
+          onfocus="this.style.borderColor='var(--grn)'" onblur="this.style.borderColor='var(--bdr)'"/>
+        `:''}
+        <div class="vf-btns" style="margin-top:10px">
           <button class="btn-sm primary" onclick="saveVio(${i})">Хадгалах</button>
           <button class="btn-sm" onclick="closeForm(${i})">Болих</button>
           ${s.vio?`<button class="btn-sm danger" onclick="clearVio(${i})">Арилгах</button>`:''}
@@ -764,13 +779,30 @@ function render(){
 
 function setActive(i){active=i;render();}
 function toggle(i){state[i].done=!state[i].done;active=i;render();}
-function openForm(i){state.forEach((s,j)=>{if(j!==i)s.form=false;});state[i].form=!state[i].form;state[i].draft=state[i].vio;active=i;render();}
+function openForm(i){state.forEach((s,j)=>{if(j!==i)s.form=false;});state[i].form=!state[i].form;if(!state[i].draft)state[i].draft=state[i].vio;active=i;render();}
 function closeForm(i){state[i].form=false;render();}
+function toggleFixed(i){
+  state[i].vfixed=!state[i].vfixed;
+  // save current textarea/input values before re-render
+  const t=document.getElementById('vf-'+i);
+  if(t)state[i].draft=t.value;
+  const w=document.getElementById('vfw-'+i);
+  if(w)state[i].vworker=w.value.trim();
+  const n=document.getElementById('vfn-'+i);
+  if(n)state[i].vfixnote=n.value.trim();
+  render();
+  // re-focus fix note if just checked
+  if(state[i].vfixed){
+    setTimeout(()=>{const fn=document.getElementById('vfn-'+i);if(fn)fn.focus();},50);
+  }
+}
 function saveVio(i){
   const t=document.getElementById('vf-'+i);
   if(t&&t.value.trim())state[i].vio=t.value.trim();
   const w=document.getElementById('vfw-'+i);
   if(w)state[i].vworker=w.value.trim();
+  const n=document.getElementById('vfn-'+i);
+  if(n)state[i].vfixnote=n.value.trim();
   state[i].form=false;render();checkVioWarning();
 }
 function clearVio(i){state[i].vio='';state[i].form=false;render();}
