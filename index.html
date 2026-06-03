@@ -2,604 +2,478 @@
 <html lang="mn">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="theme-color" content="#0B1C36"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>ХАБЭА — Өдөр дутмын хяналт</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F0F3F8;--bg3:#E8EDF4;
-  --txt:#1A2332;--tx2:#5A6A7E;--tx3:#99A6B5;
-  --bdr:#DDE3ED;--bd2:#C8D0DE;
-  --blue:#1B56C8;--bl2:#1648A8;--blt:#E8F0FE;
-  --nvy:#0B1C36;
-  --grn:#047A52;--gbg:#E6F7F1;--gtx:#035A3C;
-  --red:#C92020;--rbg:#FEE8E8;--rtx:#8B1515;
-  --amb:#B86200;--abg:#FEF3E2;--atx:#8A4900;
-  --r:6px;--rm:10px;--rl:14px;
+  --blue:#185FA5;--blue-l:#E6F1FB;--blue-m:#378ADD;--blue-d:#0C447C;
+  --grn:#1D9E75;--grn-l:#E1F5EE;--grn-d:#0F6E56;
+  --red:#E24B4A;--red-l:#FCEBEB;--red-d:#A32D2D;
+  --amb:#BA7517;--amb-l:#FAEEDA;
+  --ink:#1a2040;--mut:#5a6b8f;--bdr:#dde3ee;--bdr2:#c0cfe8;
+  --surf:#fff;--surf2:#f4f7fc;--bg:#eef2f9;
+  --rad:8px;--radl:12px;
 }
-html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;font-size:13px;line-height:1.5;color:var(--txt);background:var(--bg)}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--nvy);color:#fff;padding:9px 18px;border-radius:20px;font-size:12px;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ── LANDING ── */
-#landing{position:fixed;inset:0;background:var(--nvy);display:flex;align-items:center;justify-content:center;z-index:3000;padding:16px}
-.lgrid{position:absolute;inset:0;opacity:.05;pointer-events:none;background:repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 36px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 36px)}
-.land-wrap{width:100%;max-width:380px;position:relative;z-index:1}
-.land-logo{text-align:center;margin-bottom:28px}
-.land-ico{width:64px;height:64px;background:var(--blue);border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;margin:0 auto 12px}
-.land-co{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.land-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:4px}
-.land-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.land-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px 18px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:14px}
-.land-card:hover,.land-card:active{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);transform:translateY(-1px)}
-.land-card-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.land-card-nm{font-size:14px;font-weight:700;color:#fff;line-height:1.2}
-.land-card-sub{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:2px}
-.land-arr{margin-left:auto;color:rgba(255,255,255,.3);font-size:18px;flex-shrink:0}
-.land-ver{text-align:center;font-size:10.5px;color:rgba(255,255,255,.25)}
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.fi{animation:fi .2s ease}
-
-/* ── PIN SCREEN ── */
-.pin-screen{position:fixed;inset:0;background:var(--nvy);display:none;align-items:center;justify-content:center;z-index:3000;padding:16px}
-.pin-screen.open{display:flex}
-.ws-back{position:absolute;top:18px;left:18px;background:rgba(255,255,255,.08);border:none;border-radius:8px;padding:8px 12px;color:rgba(255,255,255,.6);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:6px}
-.ws-back:hover{background:rgba(255,255,255,.14)}
-.lcard{background:#fff;border-radius:22px;padding:36px 32px 28px;width:340px;max-width:100%;position:relative;z-index:1;color:#1A2332}
-.lico{width:56px;height:56px;background:var(--blue);border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;margin:0 auto 10px}
-.lco{font-size:16px;font-weight:700;color:var(--nvy);text-align:center}
-.lcs{font-size:11.5px;color:var(--tx2);text-align:center;margin-top:2px;margin-bottom:22px}
-.pds{display:flex;justify-content:center;gap:14px;margin-bottom:20px}
-.pdot{width:13px;height:13px;border-radius:50%;border:2px solid var(--bd2);background:transparent;transition:all .18s}
-.pdot.on{background:var(--blue);border-color:var(--blue);transform:scale(1.15)}
-.pdot.er{background:var(--red);border-color:var(--red)}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.pb{height:54px;border-radius:12px;border:1.5px solid var(--bd2)!important;background:#F0F4FF!important;font-size:22px!important;font-weight:700!important;color:var(--nvy)!important;cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
-.pb:hover{background:#E8F0FE!important;border-color:var(--blue)!important;color:var(--blue)!important}
-.pb:active{transform:scale(.92);background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}
-.pb.gh{border-color:transparent!important;background:transparent!important;cursor:default;pointer-events:none}
-.pem{text-align:center;color:var(--red);font-size:12px;margin-top:10px;min-height:17px;font-weight:600}
-.phi{text-align:center;color:var(--tx3);font-size:11px;margin-top:12px}
-@keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
-.shk{animation:shk .38s ease}
-
-/* ── APP SHELL ── */
-#app{display:none;height:100vh;height:100dvh;overflow:hidden}
-.alayout{display:flex;height:100vh;height:100dvh}
-
-/* ── SIDEBAR (desktop) ── */
-.sdb{width:230px;min-width:230px;background:var(--nvy);display:flex;flex-direction:column;overflow:hidden}
-.sbrand{padding:14px 12px 10px;border-bottom:1px solid rgba(255,255,255,.07)}
-.sbrand-row{display:flex;align-items:center;gap:9px}
-.sbrand-ic{width:33px;height:33px;background:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;flex-shrink:0}
-.sbrand-nm{font-size:12px;font-weight:700;color:#EEF3FF;line-height:1.25}
-.sbrand-sub{font-size:9.5px;color:rgba(255,255,255,.35);margin-top:1px}
-.sb-worker-wrap{padding:9px 10px 0}
-.sb-worker-inp{width:100%;font-size:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:6px 9px;color:#fff;outline:none}
-.sb-worker-inp::placeholder{color:rgba(255,255,255,.3)}
-.sb-worker-inp:focus{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.3)}
-.sb-lbl{padding:10px 12px 4px;font-size:9.5px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em}
-.tasag-pills{display:flex;flex-wrap:wrap;gap:4px;padding:0 10px 8px;border-bottom:1px solid rgba(255,255,255,.07)}
-.tpill{font-size:11px;padding:4px 9px;border-radius:20px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:rgba(255,255,255,.65);cursor:pointer;transition:all .12s;white-space:nowrap}
-.tpill:hover{background:rgba(255,255,255,.12)}
-.tpill.sel{background:rgba(27,86,200,.5);border-color:rgba(130,188,255,.5);color:#fff;font-weight:600}
-.sbnav{flex:1;overflow-y:auto;padding:6px 0}
-.sbnav::-webkit-scrollbar{width:2px}
-.sbnav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
-.ni{display:flex;align-items:flex-start;gap:7px;padding:6px 12px;cursor:pointer;border-left:2px solid transparent;transition:background .1s}
-.ni:hover{background:rgba(255,255,255,.07)}
-.ni.active{background:rgba(27,86,200,.35);border-left-color:#85B7EB}
-.ni-num{font-size:10px;color:rgba(255,255,255,.3);min-width:15px;padding-top:2px}
-.ni-lbl{font-size:11.5px;color:rgba(255,255,255,.72);line-height:1.35;flex:1}
-.ni.active .ni-lbl{color:#fff}
-.ni.is-done .ni-lbl{color:rgba(255,255,255,.35)}
-.ni-dot{width:5px;height:5px;border-radius:50%;margin-top:5px;background:transparent;flex-shrink:0}
-.ni.is-done .ni-dot{background:#5DCAA5}
-.ni.is-vio .ni-dot{background:#F09595}
-.sbfoot{padding:10px 12px;border-top:1px solid rgba(255,255,255,.07)}
-.progbar{height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden;margin-bottom:5px}
-.progfill{height:100%;border-radius:2px;background:#5DCAA5;transition:width .35s}
-.prog-row{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.4)}
-
-/* ── TOP BAR ── */
-.topbar{background:#fff;border-bottom:1px solid var(--bdr);padding:0 14px;height:50px;display:flex;align-items:center;gap:8px;flex-shrink:0}
-.tbtitle{font-size:13.5px;font-weight:700;color:var(--txt);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sync-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tx3);padding:4px 10px;border:1px solid var(--bdr);border-radius:20px}
-.sync-badge.ok{color:var(--gtx);border-color:var(--grn);background:var(--gbg)}
-.sync-badge.err{color:var(--rtx);border-color:var(--red);background:var(--rbg)}
-.sync-badge.syncing{color:var(--atx);border-color:var(--amb)}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+.hdr{background:var(--blue-d);padding:0 18px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hdr-brand{display:flex;align-items:center;gap:9px}
+.hdr-ic{width:28px;height:28px;background:rgba(255,255,255,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.hdr-name{font-size:13px;font-weight:700;color:#fff;letter-spacing:0.03em}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,0.45);margin-left:6px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-date{font-size:12px;color:rgba(255,255,255,0.6)}
+.hdr-sync{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.5);padding:4px 10px;border:0.5px solid rgba(255,255,255,0.18);border-radius:6px}
+.hdr-sync.ok{color:#9FE1CB;border-color:rgba(159,225,203,0.3)}
+.hdr-sync.err{color:#F09595;border-color:rgba(240,149,149,0.3)}
+.hdr-sync.syncing{color:rgba(255,255,255,0.6)}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-.ib{width:32px;height:32px;border-radius:7px;border:1px solid var(--bdr);background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--tx2);font-size:14px;flex-shrink:0}
-.ib:hover{background:var(--bg3)}
-.bpri{display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.bpri:hover{background:var(--bl2)}
-.bpri:disabled{opacity:.5;cursor:default}
-.bsec{display:inline-flex;align-items:center;gap:5px;background:var(--gbg);color:var(--gtx);border:1px solid var(--grn);border-radius:7px;padding:6px 11px;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.bsec:hover{background:#d0f0e4}
-.bsec:disabled{opacity:.5}
-.bdng{display:inline-flex;align-items:center;gap:5px;background:var(--rbg);color:var(--rtx);border:1px solid var(--red);border-radius:7px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
-
-/* ── DATE NAV ── */
-.date-nav{padding:7px 14px;background:#fff;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px;flex-shrink:0}
-.dn-btn{width:28px;height:28px;border:1px solid var(--bdr);border-radius:6px;background:var(--bg3);color:var(--tx2);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-report,.btn-cfg{font-size:11px;padding:5px 12px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.22);border-radius:6px;color:#fff;cursor:pointer}
+.btn-report:hover,.btn-cfg:hover{background:rgba(255,255,255,0.18)}
+.wrap{display:flex;flex:1;overflow:hidden}
+.sidebar{width:212px;min-width:212px;background:var(--blue-d);display:flex;flex-direction:column;overflow:hidden}
+.sb-pad{padding:10px 10px 6px}
+.sb-inp{width:100%;font-size:12px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.18);border-radius:6px;padding:6px 9px;color:#fff;outline:none;margin-bottom:5px}
+.sb-inp::placeholder{color:rgba(255,255,255,0.35)}
+.sb-inp:focus{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4)}
+.sb-lbl-hdr{padding:8px 12px 4px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em}
+.tasag-btns{display:flex;flex-wrap:wrap;gap:4px;padding:0 10px 8px;border-bottom:0.5px solid rgba(255,255,255,0.1)}
+.tg-btn{font-size:11px;padding:4px 9px;border-radius:5px;border:0.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.12s}
+.tg-btn:hover{background:rgba(255,255,255,0.12)}
+.tg-btn.sel{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.4);color:#fff;font-weight:600}
+.sb-nav{flex:1;overflow-y:auto;padding:6px 0}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:2px}
+.sb-item{display:flex;align-items:flex-start;gap:7px;padding:6px 12px;cursor:pointer;border-left:2px solid transparent;transition:background 0.1s}
+.sb-item:hover{background:rgba(255,255,255,0.07)}
+.sb-item.active{background:rgba(255,255,255,0.12);border-left-color:#85B7EB}
+.sb-num{font-size:10px;color:rgba(255,255,255,0.35);min-width:15px;padding-top:2px}
+.sb-lbl{font-size:11.5px;color:rgba(255,255,255,0.75);line-height:1.35;flex:1}
+.sb-item.active .sb-lbl{color:#fff}
+.sb-item.is-done .sb-lbl{color:rgba(255,255,255,0.38)}
+.sb-dot{width:5px;height:5px;border-radius:50%;margin-top:5px;background:transparent;flex-shrink:0}
+.sb-item.is-done .sb-dot{background:#5DCAA5}
+.sb-item.is-vio .sb-dot{background:#F09595}
+.sb-footer{padding:10px 12px;border-top:0.5px solid rgba(255,255,255,0.1)}
+.prog-bar{height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;border-radius:2px;background:#5DCAA5;transition:width 0.35s}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.4)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.top-bar{padding:11px 18px;background:var(--surf);border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tb-title{font-size:14px;font-weight:700;color:var(--ink)}
+.tb-sub{font-size:11px;color:var(--mut);margin-top:2px}
+.tb-right{display:flex;gap:8px;align-items:center}
+.stat{background:var(--surf2);border:0.5px solid var(--bdr);border-radius:6px;padding:4px 10px;text-align:center;min-width:44px}
+.stat-n{font-size:15px;font-weight:700;color:var(--blue)}
+.stat-n.red{color:var(--red)}.stat-n.grn{color:var(--grn)}
+.stat-l{font-size:10px;color:var(--mut)}
+.btn-day-save{font-size:11px;padding:5px 11px;background:var(--grn);color:#fff;border:none;border-radius:6px;cursor:pointer}
+.btn-day-save:hover{background:var(--grn-d)}
+.btn-day-save:disabled{opacity:0.5;cursor:default}
+.btn-reset{font-size:11px;padding:5px 10px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf);color:var(--mut);cursor:pointer}
+.btn-reset:hover{background:var(--surf2)}
+.date-nav{padding:8px 18px;background:var(--surf);border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.dn-btn{width:26px;height:26px;border:0.5px solid var(--bdr2);border-radius:5px;background:var(--surf2);color:var(--mut);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
 .dn-btn:hover{background:var(--bdr)}
-.dn-label{font-size:12px;font-weight:600;color:var(--txt);flex:1;text-align:center}
-.dn-today{font-size:11px;padding:3px 10px;border:1px solid var(--blue);border-radius:6px;background:var(--blt);color:var(--blue);cursor:pointer;flex-shrink:0}
-
-/* ── WARN BANNER ── */
-.warn-banner{background:var(--abg);border-bottom:1px solid #FDE68A;padding:7px 14px;display:flex;align-items:flex-start;gap:8px;flex-shrink:0;font-size:11.5px;color:var(--atx);font-weight:600;display:none}
-.warn-banner.show{display:flex}
-.warn-close{margin-left:auto;cursor:pointer;font-size:15px;color:var(--amb);padding:0 4px;flex-shrink:0}
-
-/* ── MAIN CONTENT ── */
-.mn{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.ct{flex:1;overflow-y:auto;padding:12px 14px 80px}
-.ct::-webkit-scrollbar{width:4px}
-.ct::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
-
-/* ── STAT CARDS ── */
-.srow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
-.scard{background:#fff;border:1px solid var(--bdr);border-radius:var(--rl);padding:11px 13px}
-.slbl{font-size:10px;color:var(--tx2);margin-bottom:4px;display:flex;align-items:center;gap:4px}
-.sval{font-size:22px;font-weight:700;color:var(--txt);line-height:1}
-.cr{color:var(--red)}.cb{color:var(--blue)}.cg{color:var(--grn)}.ca{color:var(--amb)}
-
-/* ── CHECK CARDS ── */
-.card{background:#fff;border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 14px;margin-bottom:9px;transition:border-color .15s}
-.card.is-vio{border-left:3px solid var(--red);padding-left:11px}
-.card.is-vio.is-fixed{border-left-color:var(--grn)}
-.card.is-checked{background:#f6fffe;border-color:#9FE1CB}
+.dn-label{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+.dn-today{font-size:11px;padding:3px 9px;border:0.5px solid var(--blue-m);border-radius:5px;background:var(--blue-l);color:var(--blue);cursor:pointer}
+.content-area{flex:1;overflow-y:auto;padding:14px 18px}
+.content-area::-webkit-scrollbar{width:4px}
+.content-area::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+.card{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--radl);padding:13px 15px;margin-bottom:9px}
+.card.is-vio{border-left:2.5px solid var(--red);padding-left:12.5px}
+.card.is-checked{background:#fafffe;border-color:#b8e8d8}
 .card-top{display:flex;align-items:flex-start;gap:10px}
-.ck-box{width:22px;height:22px;min-width:22px;border:1.5px solid var(--bd2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px;flex-shrink:0}
+.ck-box{width:22px;height:22px;min-width:22px;border:1.5px solid var(--bdr2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:1px}
 .card.is-checked .ck-box{background:var(--grn);border-color:var(--grn)}
-.ck-num{font-size:11px;color:var(--tx3);min-width:16px;padding-top:3px;flex-shrink:0}
-.ck-txt{flex:1;font-size:13px;color:var(--txt);line-height:1.5}
-.card.is-checked .ck-txt{color:var(--tx2)}
-.vio-btn{font-size:11px;padding:3px 9px;border:1px solid var(--red);border-radius:5px;color:var(--rtx);background:transparent;cursor:pointer;flex-shrink:0;font-weight:600}
-.vio-btn:hover{background:var(--rbg)}
-.vio-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
-.vtag{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:5px}
-.vtag.open{background:var(--rbg);color:var(--rtx)}
-.vtag.fixed{background:var(--gbg);color:var(--gtx)}
-.vtag.pend{background:var(--abg);color:var(--atx)}
-.vworker{display:inline-flex;align-items:center;gap:4px;font-size:11px;background:var(--blt);color:#1E3A8A;padding:3px 8px;border-radius:5px;border:0.5px solid #93C5FD}
-
-/* ── VIO FORM ── */
-.vio-form{margin-top:9px;padding:11px;background:var(--bg3);border-radius:var(--rm);border:1px solid var(--bdr)}
-.vf-lbl{font-size:10.5px;font-weight:700;color:var(--tx2);margin-bottom:4px;display:block}
-.vf-row{margin-bottom:9px}
-.vf-inp{width:100%;font-size:12.5px;padding:7px 9px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--txt);font-family:inherit;outline:none}
-.vf-inp:focus{border-color:var(--blue)}
-.vf-inp.ta{resize:none}
-.vf-fix-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border:1px solid var(--bdr);border-radius:var(--r);margin-bottom:9px;cursor:pointer}
-.vf-fix-chk{width:16px;height:16px;cursor:pointer;accent-color:var(--grn)}
-.vf-fix-note{display:none}
-.vf-fix-note.show{display:block}
-.vf-btns{display:flex;gap:6px}
-.btn-sm{font-size:11.5px;padding:5px 12px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--txt);cursor:pointer;font-weight:600}
-.btn-sm:hover{background:var(--bg3)}
+.ck-num{font-size:11px;color:var(--mut);min-width:16px;padding-top:3px}
+.ck-txt{flex:1;font-size:13px;color:var(--ink);line-height:1.5}
+.card.is-checked .ck-txt{color:var(--mut)}
+.vio-btn{font-size:11px;padding:3px 9px;border:0.5px solid var(--red-d);border-radius:5px;color:var(--red-d);background:transparent;cursor:pointer;flex-shrink:0}
+.vio-btn:hover{background:var(--red-l)}
+.vio-tag{display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-size:11px;background:var(--red-l);color:var(--red-d);padding:3px 9px;border-radius:5px}
+.vio-form{margin-top:9px;padding:10px;background:var(--surf2);border-radius:var(--rad);border:0.5px solid var(--bdr)}
+.vio-form textarea{width:100%;font-size:12px;padding:7px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);font-family:inherit;resize:none;outline:none}
+.vio-form textarea:focus{border-color:var(--blue-m)}
+.vf-btns{display:flex;gap:6px;margin-top:7px}
+.btn-sm{font-size:11px;padding:4px 12px;border:0.5px solid var(--bdr2);border-radius:5px;background:var(--surf);color:var(--ink);cursor:pointer}
+.btn-sm:hover{background:var(--surf2)}
+.btn-sm.danger{border-color:#f7c1c1;color:var(--red-d)}
 .btn-sm.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-.btn-sm.danger{border-color:var(--red);color:var(--rtx)}
-
-/* ── VLOG ── */
-.vlog-section{background:#fff;border-top:1px solid var(--bdr);padding:10px 14px;flex-shrink:0}
+.vlog-section{background:var(--surf);border-top:0.5px solid var(--bdr);padding:10px 18px;flex-shrink:0}
 .vl-hdr{display:flex;align-items:center;gap:6px;margin-bottom:7px}
-.vl-title{font-size:10.5px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em}
-.vl-cnt{font-size:10.5px;padding:2px 7px;border-radius:4px;font-weight:700}
-.vl-cnt.red{background:var(--rbg);color:var(--rtx)}
-.vl-cnt.amb{background:var(--abg);color:var(--atx)}
-.vlog-list{display:flex;flex-wrap:wrap;gap:7px}
-.vli{padding:7px 10px;border-radius:var(--rm);min-width:160px;flex:1;border:1px solid}
-.vli.open{background:var(--rbg);border-color:#f7c1c1}
-.vli.fixed{background:var(--gbg);border-color:#9FE1CB}
-.vli-n{font-size:10px;font-weight:700;margin-bottom:2px}
-.vli.open .vli-n{color:var(--rtx)}
-.vli.fixed .vli-n{color:var(--gtx)}
-.vli-w{font-size:10px;color:#1E3A8A;background:var(--blt);display:inline-block;padding:1px 6px;border-radius:3px;margin-bottom:3px}
-.vli-t{font-size:11px;line-height:1.4}
-.vli.open .vli-t{color:#501313}
-.vli.fixed .vli-t{color:var(--gtx)}
-.vli-fn{font-size:10px;margin-top:3px}
-.vli.fixed .vli-fn{color:var(--gtx)}
-.vli.open .vli-fn{color:var(--rtx);font-style:normal}
-.empty-log{font-size:12px;color:var(--tx3)}
-
-/* ── MODAL ── */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
-.mo.op{display:flex}
-.mbox{background:#fff;border-radius:16px;width:500px;max-width:95vw;max-height:88vh;overflow-y:auto;padding:18px;border:1px solid var(--bd2)}
-.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.mt2{font-size:13.5px;font-weight:700;color:var(--txt)}
-.bgh{padding:5px 12px;border-radius:7px;border:1px solid var(--bd2);background:none;font-size:11.5px;cursor:pointer;color:var(--tx2);font-weight:700}
-.bgh:hover{background:var(--bg3)}
-.fgrp{margin-bottom:9px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.flbl{font-size:10.5px;color:var(--tx2);margin-bottom:3px;display:block;font-weight:700}
-.fi2{width:100%;padding:7px 9px;border:1px solid var(--bdr);border-radius:var(--r);font-size:12.5px;color:var(--txt);background:#fff;outline:none}
-.fi2:focus{border-color:var(--blue)}
-.cfg-hint{font-size:11px;color:var(--tx2);line-height:1.55;background:var(--blt);border:1px solid #93C5FD;border-radius:var(--rm);padding:10px 13px;margin-bottom:11px}
-.cfg-hint code{background:#fff;color:var(--nvy);padding:1px 5px;border-radius:3px;font-size:10px;font-family:monospace}
-.cfg-status{font-size:12px;padding:8px 12px;border-radius:7px;display:none;margin-bottom:8px}
-.cfg-status.ok{background:var(--gbg);color:var(--gtx);display:block}
-.cfg-status.err{background:var(--rbg);color:var(--rtx);display:block}
-.cfg-status.testing{background:var(--blt);color:#1E3A8A;display:block}
-
-/* ── REPORT MODAL ── */
-.rpt-head{margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--nvy)}
-.rpt-title{font-size:15px;font-weight:700;color:var(--nvy);margin-bottom:3px}
-.rpt-meta{font-size:11px;color:var(--tx2)}
-.rpt-sum{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
-.rpt-stat{background:var(--bg3);border:1px solid var(--bdr);border-radius:var(--rm);padding:9px 11px}
-.rpt-stat-n{font-size:18px;font-weight:700;color:var(--blue)}
+.vl-title{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:0.06em}
+.vl-cnt{font-size:11px;background:var(--red-l);color:var(--red-d);padding:2px 7px;border-radius:4px;font-weight:700}
+.vlog-list{display:flex;flex-wrap:wrap;gap:6px}
+.vl-item{padding:6px 10px;border:0.5px solid #f7c1c1;border-radius:var(--rad);background:var(--red-l);min-width:160px;max-width:280px}
+.vl-n{font-size:10px;font-weight:700;color:var(--red-d);margin-bottom:2px}
+.vl-t{font-size:11px;color:#501313}
+.empty-log{font-size:12px;color:var(--mut)}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,20,50,0.5);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surf);border-radius:var(--radl);width:860px;max-width:96vw;max-height:92vh;display:flex;flex-direction:column;border:0.5px solid var(--bdr2)}
+.modal-hdr{padding:13px 18px;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-hdr h3{font-size:14px;font-weight:700;color:var(--ink)}
+.modal-hdr-right{display:flex;gap:7px;align-items:center}
+.modal-close{width:28px;height:28px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--mut);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--bdr)}
+.modal-body{flex:1;overflow-y:auto;padding:18px}
+.modal-body::-webkit-scrollbar{width:4px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+.btn-print{font-size:12px;padding:6px 13px;background:var(--blue-d);color:#fff;border:none;border-radius:6px;cursor:pointer}
+.btn-dl{font-size:12px;padding:6px 13px;background:var(--grn);color:#fff;border:none;border-radius:6px;cursor:pointer}
+/* CFG modal */
+.cfg-modal{background:var(--surf);border-radius:var(--radl);width:520px;max-width:96vw;display:flex;flex-direction:column;border:0.5px solid var(--bdr2)}
+.cfg-body{padding:18px;display:flex;flex-direction:column;gap:14px}
+.cfg-row label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:5px}
+.cfg-row input,.cfg-row textarea{width:100%;font-size:12px;padding:8px 10px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--ink);outline:none;font-family:inherit}
+.cfg-row input:focus,.cfg-row textarea:focus{border-color:var(--blue-m);background:var(--surf)}
+.cfg-row textarea{resize:vertical;min-height:60px;font-size:11px}
+.cfg-hint{font-size:11px;color:var(--mut);line-height:1.5;background:var(--surf2);border:0.5px solid var(--bdr);border-radius:6px;padding:10px 12px}
+.cfg-hint code{background:#e6f1fb;color:var(--blue-d);padding:1px 5px;border-radius:3px;font-size:10px}
+.cfg-status{font-size:12px;padding:8px 12px;border-radius:6px;display:none}
+.cfg-status.ok{background:var(--grn-l);color:var(--grn-d);display:block}
+.cfg-status.err{background:var(--red-l);color:var(--red-d);display:block}
+.cfg-status.testing{background:var(--blue-l);color:var(--blue-d);display:block}
+.cfg-btns{display:flex;gap:8px;justify-content:flex-end}
+.btn-cfg-test{font-size:12px;padding:7px 14px;border:0.5px solid var(--blue-m);border-radius:6px;background:var(--blue-l);color:var(--blue);cursor:pointer}
+.btn-cfg-save{font-size:12px;padding:7px 14px;background:var(--blue-d);color:#fff;border:none;border-radius:6px;cursor:pointer}
+/* REPORT */
+.rpt-head{margin-bottom:16px;padding-bottom:12px;border-bottom:1.5px solid var(--blue-d)}
+.rpt-title{font-size:16px;font-weight:700;color:var(--blue-d);margin-bottom:4px}
+.rpt-meta{font-size:12px;color:var(--mut)}
+.rpt-section{margin-bottom:18px}
+.rpt-section-title{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;padding-bottom:4px;border-bottom:0.5px solid var(--bdr)}
+.rpt-table{width:100%;border-collapse:collapse;font-size:12px}
+.rpt-table th{background:#f0f5ff;color:var(--blue-d);padding:6px 9px;text-align:left;border:0.5px solid var(--bdr2);font-weight:600;font-size:11px}
+.rpt-table td{padding:6px 9px;border:0.5px solid var(--bdr);vertical-align:top}
+.rpt-table tr:nth-child(even) td{background:var(--surf2)}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600}
+.badge.ok{background:#e1f5ee;color:#0f6e56}
+.badge.vio{background:var(--red-l);color:var(--red-d)}
+.rpt-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.rpt-stat{background:var(--surf2);border:0.5px solid var(--bdr);border-radius:var(--rad);padding:10px 12px}
+.rpt-stat-n{font-size:20px;font-weight:700;color:var(--blue)}
 .rpt-stat-n.grn{color:var(--grn)}.rpt-stat-n.red{color:var(--red)}.rpt-stat-n.amb{color:var(--amb)}
-.rpt-stat-l{font-size:10px;color:var(--tx2);margin-top:2px}
-.rpt-sec{margin-bottom:16px}
-.rpt-sec-t{font-size:10.5px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--bdr)}
-.rpt-sec-t.danger{color:var(--rtx)}.rpt-sec-t.warn{color:var(--atx)}
-.rtbl{width:100%;border-collapse:collapse;font-size:11px}
-.rtbl th{background:#EEF2FF;color:var(--nvy);padding:6px 8px;text-align:left;border:1px solid var(--bd2);font-weight:700;font-size:10px}
-.rtbl td{padding:5px 8px;border:1px solid var(--bdr);vertical-align:top}
-.rtbl tr:nth-child(even) td{background:var(--bg3)}
-.rtbl tr.dr td{background:var(--rbg)}
-.bdg{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600}
-.bdg.ok{background:var(--gbg);color:var(--gtx)}
-.bdg.vio{background:var(--rbg);color:var(--rtx)}
-.bdg.fix{background:var(--gbg);color:var(--gtx)}
-.bdg.warn{background:var(--abg);color:var(--atx)}
-.bdg.dng{background:var(--rbg);color:var(--rtx);font-weight:700}
-.wcard{border-radius:var(--rm);padding:10px 13px;margin-bottom:8px;display:flex;gap:9px}
-.wcard.warn{background:var(--abg);border:1px solid #FDE68A}
-.wcard.danger{background:var(--rbg);border:1px solid #F09595}
-.wcard-nm{font-size:13px;font-weight:700}
-.wcard.warn .wcard-nm{color:var(--atx)}
-.wcard.danger .wcard-nm{color:var(--rtx)}
-.wcard-dt{font-size:11px;margin-top:3px;line-height:1.5}
-.wcard.warn .wcard-dt{color:#412402}
-.wcard.danger .wcard-dt{color:#501313}
-.month-sel-row{display:flex;gap:7px;align-items:center}
-.month-sel-row label{font-size:11.5px;color:var(--tx2)}
-.month-sel-row select{font-size:12px;padding:5px 8px;border:1px solid var(--bdr);border-radius:7px;background:var(--bg3);color:var(--txt);outline:none}
+.rpt-stat-l{font-size:11px;color:var(--mut);margin-top:2px}
+.month-sel-row{display:flex;gap:8px;align-items:center}
+.month-sel-row label{font-size:12px;color:var(--mut)}
+.month-sel-row select{font-size:12px;padding:5px 9px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--ink);outline:none;cursor:pointer}
+@media(max-width:700px){
+  .sidebar{width:160px;min-width:160px}
+  .sb-lbl{font-size:11px}
+  .modal{width:98vw}
+  .hdr-sub,.hdr-date{display:none}
+  .stat{min-width:36px}
+}
 
-/* ── MOBILE ── */
-.mob-top{display:none}
-.mob-bottom{display:none}
-/* Slide-down panel: ☰ дарахад дээрээс доош, handle/overlay дарахад дээшоо хураагдана */
+/* ── MOBILE SLIDE-DOWN PANEL ── */
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:399}
+.mob-overlay.open{display:block}
 .mob-panel{
   position:fixed;top:0;left:0;right:0;
-  background:var(--nvy);
+  background:var(--blue-d);
   z-index:400;
   transform:translateY(-100%);
   transition:transform .3s cubic-bezier(.4,0,.2,1);
-  display:flex;flex-direction:column;
+  display:none;flex-direction:column;
   max-height:88dvh;
-  border-radius:0 0 20px 20px;
+  border-radius:0 0 18px 18px;
   box-shadow:0 8px 32px rgba(0,0,0,.4);
   overflow:hidden;
 }
 .mob-panel.open{transform:translateY(0)}
-/* Хаах handle — доод мөрийн зураасан дэвсгэр */
 .mob-handle{
   flex-shrink:0;padding:8px 0 10px;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  background:rgba(0,0,0,.12);
+  cursor:pointer;background:rgba(0,0,0,.12);
 }
 .mob-handle::before{
   content:'';display:block;width:38px;height:4px;
   background:rgba(255,255,255,.28);border-radius:2px;
 }
-.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:399}
-.mob-overlay.open{display:block}
+.mob-top{display:none}
 
 @media(max-width:768px){
-  body{overflow:hidden;height:100dvh}
-  #app{height:100dvh}
-  .alayout{flex-direction:column;height:100dvh}
-  .sdb{display:none!important}
-  .topbar{display:none!important}
-  /* top bar */
-  .mob-top{display:flex;align-items:center;background:var(--nvy);height:52px;padding:0 12px;gap:8px;flex-shrink:0}
-  .mob-ham{width:36px;height:36px;border-radius:8px;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-  .mob-ham:active{background:rgba(255,255,255,.2)}
+  .mob-panel{display:flex}
+  .mob-top{
+    display:flex;align-items:center;background:var(--blue-d);
+    height:50px;padding:0 12px;gap:8px;flex-shrink:0;
+    position:sticky;top:0;z-index:10;
+  }
+  .mob-ham{
+    width:36px;height:36px;border-radius:8px;border:none;
+    background:rgba(255,255,255,.12);color:#fff;font-size:18px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  }
+  .mob-ham:active{background:rgba(255,255,255,.22)}
   .mob-title{flex:1;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mob-sync{font-size:10px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:4px;flex-shrink:0}
-  .mob-sync.ok{color:#5DCAA5}.mob-sync.err{color:#F09595}.mob-sync.syncing{color:#FDE68A}
-  .mob-top-ic{width:34px;height:34px;border-radius:8px;border:none;background:rgba(255,255,255,.1);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-  .mob-top-ic:active{background:rgba(255,255,255,.2)}
-  /* main area */
-  .mn{flex:1;display:flex;flex-direction:column;overflow:hidden}
-  .ct{flex:1;overflow-y:auto;padding:10px 10px 66px}
-  /* bottom nav */
-  .mob-bottom{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1.5px solid var(--bdr);height:56px;z-index:200;padding-bottom:env(safe-area-inset-bottom,0px)}
-  .mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:none;cursor:pointer;color:var(--tx3);font-size:9px;font-weight:700;padding:4px 2px}
-  .mob-nav-btn:active{opacity:.7}
-  .mob-nav-btn.active{color:var(--blue)}
-  .mob-nav-btn i{font-size:21px}
-  /* layout fixes */
-  .srow{grid-template-columns:1fr 1fr!important;gap:7px!important}
-  .frow{grid-template-columns:1fr!important}
-  .mo{align-items:flex-end!important}
-  .mbox{width:100%!important;max-width:100%!important;border-radius:18px 18px 0 0!important;max-height:90vh!important}
-  .rpt-sum{grid-template-columns:1fr 1fr 1fr!important}
-  .date-nav{padding:6px 10px}
-  .scard{padding:9px 11px!important}
-  .sval{font-size:20px!important}
+  .hdr{display:none!important}
+  .wrap{flex-direction:column}
+  .sidebar{display:none!important}
+  .main{flex:1;overflow:hidden}
 }
+
+
+/* ── LOGIN SCREEN ── */
+#login-screen{
+  display:flex;position:fixed;inset:0;z-index:1000;
+  background:#0C447C;
+  align-items:center;justify-content:center;
+  flex-direction:column;
+  font-family:'Segoe UI',system-ui,sans-serif;
+}
+.login-box{
+  background:#fff;border-radius:16px;
+  padding:32px 28px 28px;
+  width:320px;max-width:90vw;
+  box-shadow:0 8px 40px rgba(0,0,0,.25);
+  text-align:center;
+}
+.login-logo{
+  width:52px;height:52px;background:#0C447C;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;margin:0 auto 14px;
+}
+.login-title{font-size:17px;font-weight:700;color:#1a2040;margin-bottom:4px}
+.login-sub{font-size:12px;color:#5a6b8f;margin-bottom:22px}
+.login-field{
+  width:100%;font-size:13px;padding:10px 12px;
+  border:1.5px solid #dde3ee;border-radius:8px;
+  outline:none;color:#1a2040;background:#f4f7fc;
+  margin-bottom:11px;box-sizing:border-box;
+  transition:border-color .15s;
+}
+.login-field:focus{border-color:#185FA5;background:#fff}
+.login-field.err{border-color:#E24B4A;background:#fff8f8}
+.login-btn{
+  width:100%;padding:11px;font-size:13px;font-weight:700;
+  background:#185FA5;color:#fff;border:none;border-radius:8px;
+  cursor:pointer;transition:background .12s;
+}
+.login-btn:hover{background:#0C447C}
+.login-btn:active{background:#073280}
+.login-err{font-size:12px;color:#E24B4A;margin-top:8px;min-height:18px;font-weight:600}
+.login-hint{font-size:11px;color:#8a9bbf;margin-top:14px;padding-top:12px;border-top:1px solid #eef2f9}
+
+
+/* ── WARNING MODAL ── */
+#warn-modal{
+  display:none;position:fixed;inset:0;z-index:600;
+  background:rgba(10,20,50,.55);
+  align-items:center;justify-content:center;
+}
+#warn-modal.open{display:flex}
+.warn-box{
+  background:#fff;border-radius:14px;
+  padding:28px 24px 22px;
+  width:340px;max-width:92vw;
+  box-shadow:0 8px 40px rgba(0,0,0,.25);
+  text-align:center;
+}
+.warn-icon{font-size:38px;margin-bottom:10px}
+.warn-title{font-size:16px;font-weight:700;color:#1a2040;margin-bottom:6px}
+.warn-msg{font-size:13px;color:#5a6b8f;line-height:1.6;margin-bottom:18px}
+.warn-worker{font-size:13px;font-weight:700;color:#E24B4A;background:#fff0f0;border-radius:8px;padding:8px 14px;margin-bottom:16px}
+.warn-btn{
+  width:100%;padding:11px;font-size:13px;font-weight:700;
+  background:#E24B4A;color:#fff;border:none;border-radius:8px;cursor:pointer;
+}
+.warn-btn:hover{background:#c93030}
+
 @media print{
-  #landing,#pin-screen,.mob-top,.mob-bottom,.mob-drawer,.mob-overlay,.topbar,.sdb,.date-nav,.warn-banner,.vlog-section,button{display:none!important}
-  .mn{overflow:visible!important}.ct{overflow:visible!important;height:auto!important;padding:0!important}
-  body,#app,.alayout{height:auto!important;overflow:visible!important}
-  .card{break-inside:avoid}
+  .modal-hdr-right,.modal-close,button,.hdr,.sidebar,.date-nav,.top-bar,.vlog-section{display:none!important}
+  .modal{width:100%;max-width:100%;max-height:none;border:none}
+  .modal-body{overflow:visible;max-height:none}
+  .modal-bg{position:static;background:none;display:block}
+  body>*:not(.modal-bg){display:none}
 }
 </style>
 </head>
 <body>
-<div class="toast" id="toast"></div>
 
-<!-- ═══════ LANDING ═══════ -->
-<div id="landing">
-  <div class="lgrid"></div>
-  <div class="land-wrap fi">
-    <div class="land-logo">
-      <div class="land-ico"><i class="ti ti-shield-check"></i></div>
-      <div class="land-co">ХАБЭА — Хяналтын систем</div>
-      <div class="land-sub">Хөдөлмөр аюулгүй байдал, эрүүл ахуйн өдөр дутмын хяналт</div>
+
+<!-- ═══ WARNING MODAL ═══ -->
+<div id="warn-modal">
+  <div class="warn-box">
+    <div class="warn-icon">⚠️</div>
+    <div class="warn-title">Анхааруулга!</div>
+    <div class="warn-msg" id="warn-msg"></div>
+    <div class="warn-worker" id="warn-worker"></div>
+    <button class="warn-btn" onclick="closeWarn()">Ойлголоо</button>
+  </div>
+</div>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🛡</div>
+    <div class="login-title">ХАБЭА — Хяналтын систем</div>
+    <div class="login-sub">Өдөр дутмын хяналтын хуудас</div>
+    <input class="login-field" id="login-user" placeholder="Нэвтрэх нэр" autocomplete="off" autocapitalize="off" value="ХАБЭА-н ажилтан"
+      onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+    <input class="login-field" id="login-pass" placeholder="Нууц үг" type="password"
+      onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Нэвтрэх</button>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-hint">Нууц үг: <b>9761</b></div>
+  </div>
+</div>
+
+
+<!-- Mobile overlay -->
+<div class="mob-overlay" id="mob-overlay" onclick="closeMobPanel()"></div>
+
+<!-- Mobile slide-down panel (☰ → дээрээс доош, handle/overlay → дээшоо хаагдана) -->
+<div class="mob-panel" id="mob-panel">
+  <div style="padding:13px 12px 10px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;display:flex;align-items:center;gap:9px">
+    <div style="width:28px;height:28px;background:rgba(255,255,255,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🛡</div>
+    <div><div style="font-size:13px;font-weight:700;color:#fff">ХАБЭА систем</div><div style="font-size:11px;color:rgba(255,255,255,.45)">Өдөр дутмын хяналт</div></div>
+    <button onclick="closeMobPanel()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;border-radius:8px;color:rgba(255,255,255,.7);font-size:16px;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+  <!-- Worker input -->
+  <div style="padding:9px 10px 5px;flex-shrink:0">
+    <input class="sb-inp" id="mob-worker" placeholder="Хянасан ажилтан..." oninput="document.getElementById('inp-worker').value=this.value" style="width:100%"/>
+  </div>
+  <!-- Tasag -->
+  <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;padding:6px 12px 4px;flex-shrink:0">Тасаг сонгох</div>
+  <div style="display:flex;flex-wrap:wrap;gap:4px;padding:0 10px 8px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.07)" id="mob-tasags"></div>
+  <!-- Nav -->
+  <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;padding:6px 12px 3px;flex-shrink:0">Хяналтын зүйлс</div>
+  <div id="mob-nav" style="flex:1;overflow-y:auto;min-height:0;padding:4px 0"></div>
+  <!-- Actions -->
+  <div style="padding:10px 12px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;display:flex;gap:7px">
+    <button onclick="saveDay();closeMobPanel()" style="flex:1;background:var(--grn);color:#fff;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">☁ Хадгалах</button>
+    <button onclick="resetDay()" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:0.5px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 12px;font-size:12px;cursor:pointer">↺ Шинэ өдөр</button>
+  </div>
+  <!-- Pull-down handle: дарахад дээшоо хаагдана -->
+  <div class="mob-handle" onclick="closeMobPanel()"></div>
+</div>
+
+<!-- Mobile top bar (☰ дарахад panel нээгдэнэ) -->
+<div class="mob-top" id="mob-top">
+  <button class="mob-ham" onclick="openMobPanel()">☰</button>
+  <span class="mob-title" id="mob-title">ХАБЭА хяналт</span>
+  <div id="mob-sync-badge" style="font-size:10px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:4px;flex-shrink:0"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;display:inline-block"></span><span id="mob-sync-txt">—</span></div>
+  <button onclick="openReport()" style="background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.2);border-radius:7px;color:#fff;padding:5px 10px;font-size:11px;cursor:pointer;flex-shrink:0">📊</button>
+  <button onclick="openCfg()" style="background:rgba(255,255,255,.1);border:0.5px solid rgba(255,255,255,.2);border-radius:7px;color:#fff;padding:5px 10px;font-size:11px;cursor:pointer;flex-shrink:0">⚙</button>
+</div>
+
+<div class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-ic">🛡</div>
+    <span class="hdr-name">ХАБЭА</span>
+    <span class="hdr-sub">Өдөр дутмын хяналтын систем</span>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-sync" id="sync-badge"><span class="sync-dot"></span><span id="sync-txt">Тохиргоо хийнэ үү</span></div>
+    <span class="hdr-date" id="hdr-date"></span>
+    <button class="btn-cfg" onclick="openCfg()">⚙ Sheets тохиргоо</button>
+    <button class="btn-report" onclick="openReport()">📊 Сарын тайлан</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="sidebar">
+    <div class="sb-pad">
+      <input class="sb-inp" id="inp-worker" placeholder="Хянасан ажилтан..."/>
     </div>
-    <div class="land-cards">
-      <div class="land-card" onclick="showPinScreen()">
-        <div class="land-card-ico" style="background:rgba(27,86,200,.25);color:#82BCFF"><i class="ti ti-login"></i></div>
-        <div>
-          <div class="land-card-nm">Системд нэвтрэх</div>
-          <div class="land-card-sub">ПИН кодоор нэвтэрч хяналт хийх</div>
+    <div class="sb-lbl-hdr">Тасаг сонгох</div>
+    <div class="tasag-btns" id="tasag-btns"></div>
+    <div class="sb-lbl-hdr">Хяналтын зүйлс</div>
+    <div class="sb-nav" id="sb-nav"></div>
+    <div class="sb-footer">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-row"><span id="prog-txt">0/12</span><span id="prog-pct">0%</span></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="top-bar">
+      <div>
+        <div class="tb-title" id="tb-title">Тасаг сонгоно уу</div>
+        <div class="tb-sub" id="tb-sub">ХАБЭА-н өдөр дутмын хяналтын хуудас</div>
+      </div>
+      <div class="tb-right">
+        <div class="stat"><div class="stat-n grn" id="st-done">0</div><div class="stat-l">Хийсэн</div></div>
+        <div class="stat"><div class="stat-n red" id="st-vio">0</div><div class="stat-l">Зөрчил</div></div>
+        <div class="stat"><div class="stat-n" id="st-left">12</div><div class="stat-l">Үлдсэн</div></div>
+        <button class="btn-day-save" id="btn-save" onclick="saveDay()">☁ Хадгалах</button>
+        <button class="btn-reset" onclick="resetDay()">↺ Шинэ өдөр</button>
+      </div>
+    </div>
+
+    <div class="date-nav">
+      <button class="dn-btn" onclick="shiftDay(-1)">‹</button>
+      <span class="dn-label" id="dn-label"></span>
+      <button class="dn-today" onclick="goToday()">Өнөөдөр</button>
+      <button class="dn-btn" onclick="shiftDay(1)">›</button>
+    </div>
+
+    <div class="content-area" id="content-area"></div>
+
+    <div class="vlog-section">
+      <div class="vl-hdr">
+        <span class="vl-title">Илэрсэн зөрчлийн бүртгэл</span>
+        <span class="vl-cnt" id="vl-cnt" style="display:none"></span>
+      </div>
+      <div class="vlog-list" id="vlog-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="modal-bg" id="modal-rpt" onclick="if(event.target===this)closeRpt()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="rpt-modal-title">Сарын тайлан</h3>
+      <div class="modal-hdr-right">
+        <div class="month-sel-row">
+          <label>Сар:</label><select id="rpt-month" onchange="renderReport()"></select>
+          <label>Он:</label><select id="rpt-year" onchange="renderReport()"></select>
         </div>
-        <i class="ti ti-chevron-right land-arr"></i>
-      </div>
-      <div class="land-card" onclick="showShareScreen()">
-        <div class="land-card-ico" style="background:rgba(4,122,82,.25);color:#5DCAA5"><i class="ti ti-share"></i></div>
-        <div>
-          <div class="land-card-nm">Аппыг хуваалцах</div>
-          <div class="land-card-sub">QR код эсвэл холбоос хуулах</div>
-        </div>
-        <i class="ti ti-chevron-right land-arr"></i>
+        <button class="btn-dl" onclick="dlReport()">⬇ Татах</button>
+        <button class="btn-print" onclick="window.print()">🖨 Хэвлэх</button>
+        <button class="modal-close" onclick="closeRpt()">✕</button>
       </div>
     </div>
-    <div class="land-ver">ХАБЭА Хяналтын систем v2.0 &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; А/15 тоот хавсралт № 2</div>
+    <div class="modal-body" id="rpt-body"></div>
   </div>
 </div>
 
-<!-- ═══════ PIN SCREEN ═══════ -->
-<div id="pin-screen" class="pin-screen">
-  <div class="lgrid"></div>
-  <button class="ws-back" onclick="backToLanding()"><i class="ti ti-arrow-left" style="font-size:14px"></i> Буцах</button>
-  <div class="lcard fi">
-    <div class="lico"><i class="ti ti-shield-lock"></i></div>
-    <div class="lco">ХАБЭА систем</div>
-    <div class="lcs">4 оронтой ПИН кодоо оруулна уу</div>
-    <div class="pds" id="pdots">
-      <div class="pdot" id="pd0"></div><div class="pdot" id="pd1"></div>
-      <div class="pdot" id="pd2"></div><div class="pdot" id="pd3"></div>
+<!-- CONFIG MODAL -->
+<div class="modal-bg" id="modal-cfg" onclick="if(event.target===this)closeCfg()">
+  <div class="cfg-modal">
+    <div class="modal-hdr">
+      <h3>Google Sheets тохиргоо</h3>
+      <button class="modal-close" onclick="closeCfg()">✕</button>
     </div>
-    <div class="pgrid">
-      <button class="pb" onclick="pi('1')">1</button><button class="pb" onclick="pi('2')">2</button><button class="pb" onclick="pi('3')">3</button>
-      <button class="pb" onclick="pi('4')">4</button><button class="pb" onclick="pi('5')">5</button><button class="pb" onclick="pi('6')">6</button>
-      <button class="pb" onclick="pi('7')">7</button><button class="pb" onclick="pi('8')">8</button><button class="pb" onclick="pi('9')">9</button>
-      <button class="pb gh"></button><button class="pb" onclick="pi('0')">0</button>
-      <button class="pb" onclick="pdel()"><i class="ti ti-backspace" style="font-size:20px"></i></button>
-    </div>
-    <div class="pem" id="perr"></div>
-    <div class="phi">Анхны ПИН: <strong>9761</strong></div>
-  </div>
-</div>
-
-<!-- ═══════ SHARE SCREEN ═══════ -->
-<div id="share-screen" class="pin-screen">
-  <div class="lgrid"></div>
-  <button class="ws-back" onclick="backToLanding()"><i class="ti ti-arrow-left" style="font-size:14px"></i> Буцах</button>
-  <div class="lcard fi" style="text-align:center">
-    <div style="width:48px;height:48px;background:var(--gbg);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px"><i class="ti ti-share" style="color:var(--grn)"></i></div>
-    <div class="lco">Аппыг хуваалцах</div>
-    <div class="lcs" style="margin-bottom:16px">GitHub Pages дээр байршуулсан бол доорх холбоосыг ашиглана</div>
-    <div style="background:var(--bg3);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;margin-bottom:14px;text-align:left">
-      <div id="share-url" style="flex:1;font-size:11px;color:var(--txt);font-family:monospace;word-break:break-all;line-height:1.4">index.html файлыг GitHub Pages-д upload хийсний дараа URL энд гарна</div>
-      <button onclick="copyShareURL()" style="background:var(--blue);color:#fff;border:none;border-radius:7px;padding:7px 12px;font-size:11.5px;font-weight:700;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:4px"><i class="ti ti-copy" style="font-size:13px"></i> Хуулах</button>
-    </div>
-    <div id="share-copied" style="font-size:11px;color:var(--grn);font-weight:700;min-height:16px;margin-bottom:8px"></div>
-    <button class="bgh" style="width:100%;padding:10px;border-radius:10px;font-size:13px" onclick="backToLanding()"><i class="ti ti-arrow-left" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i> Буцах</button>
-  </div>
-</div>
-
-<!-- ═══════ MODAL ═══════ -->
-<div class="mo" id="modal" onclick="cmo(event)"><div class="mbox" id="mbox"></div></div>
-
-<!-- ═══════ APP ═══════ -->
-<div id="app">
-  <!-- Mobile overlay -->
-  <div class="mob-overlay" id="mob-overlay" onclick="closeDrw()"></div>
-
-  <!-- ═══ SLIDE-DOWN PANEL (☰ → дээрээс доош, handle/overlay → дээшоо хураагдана) ═══ -->
-  <div class="mob-panel" id="mob-panel">
-    <!-- Brand header -->
-    <div style="padding:14px 12px 10px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;display:flex;align-items:center;gap:9px">
-      <div class="sbrand-ic"><i class="ti ti-shield-check"></i></div>
-      <div><div class="sbrand-nm">ХАБЭА систем</div><div class="sbrand-sub">Өдөр дутмын хяналт v2.0</div></div>
-      <button onclick="closeDrw()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;border-radius:8px;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center"><i class="ti ti-x"></i></button>
-    </div>
-    <!-- Worker input -->
-    <div style="padding:9px 10px 5px;flex-shrink:0">
-      <input class="sb-worker-inp" id="drw-worker" placeholder="Хянасан ажилтан..." oninput="syncW(this)" style="width:100%"/>
-    </div>
-    <!-- Tasag section -->
-    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;padding:6px 12px 4px;flex-shrink:0">Тасаг сонгох</div>
-    <div style="display:flex;flex-wrap:wrap;gap:4px;padding:0 10px 8px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.07)" id="drw-tasags"></div>
-    <!-- Nav list -->
-    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;padding:6px 12px 3px;flex-shrink:0">Хяналтын зүйлс</div>
-    <div class="sbnav" id="drw-nav" style="flex:1;overflow-y:auto;min-height:0"></div>
-    <!-- Save/Sync buttons -->
-    <div style="padding:10px 12px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;display:flex;gap:7px">
-      <button class="bpri" style="flex:1;justify-content:center;font-size:12px" onclick="saveDay();closeDrw()"><i class="ti ti-cloud-upload" style="font-size:12px"></i> Хадгалах</button>
-      <button class="bsec" style="font-size:12px;padding:6px 13px" onclick="manualSync();closeDrw()"><i class="ti ti-refresh" style="font-size:12px"></i> Sync</button>
-    </div>
-    <!-- ▼ Pull-down handle: энэ мөрийн зураас дарахад panel дээшоо хаагдана ▼ -->
-    <div class="mob-handle" onclick="closeDrw()"></div>
-  </div>
-
-  <!-- Mobile top bar -->
-  <div class="mob-top" id="mob-top">
-    <button class="mob-ham" onclick="openDrw()"><i class="ti ti-menu-2"></i></button>
-    <span class="mob-title" id="mob-title">ХАБЭА хяналт</span>
-    <div class="mob-sync" id="mob-sync"><span class="sync-dot"></span><span id="mob-sync-txt">—</span></div>
-    <button class="mob-top-ic" onclick="saveDay()" title="Хадгалах"><i class="ti ti-cloud-upload"></i></button>
-    <button class="mob-top-ic" onclick="openReport()" title="Тайлан"><i class="ti ti-chart-bar"></i></button>
-  </div>
-
-  <!-- Mobile bottom nav -->
-  <div class="mob-bottom">
-    <button class="mob-nav-btn active" id="mni-check" onclick="mobGoP('check')"><i class="ti ti-clipboard-check"></i><span>Хяналт</span></button>
-    <button class="mob-nav-btn" id="mni-report" onclick="openReport()"><i class="ti ti-chart-bar"></i><span>Тайлан</span></button>
-    <button class="mob-nav-btn" id="mni-cfg" onclick="openCfg()"><i class="ti ti-cloud"></i><span>Sheets</span></button>
-    <button class="mob-nav-btn" id="mni-pin" onclick="openChpw()"><i class="ti ti-lock"></i><span>ПИН</span></button>
-    <button class="mob-nav-btn" id="mni-out" onclick="doLogout()"><i class="ti ti-logout"></i><span>Гарах</span></button>
-  </div>
-
-  <div class="alayout">
-    <!-- Desktop sidebar -->
-    <div class="sdb">
-      <div class="sbrand">
-        <div class="sbrand-row">
-          <div class="sbrand-ic"><i class="ti ti-shield-check"></i></div>
-          <div><div class="sbrand-nm">ХАБЭА систем</div><div class="sbrand-sub">Өдөр дутмын хяналт v2.0</div></div>
-        </div>
+    <div class="cfg-body">
+      <div class="cfg-hint">
+        <b>Алхам 1.</b> Google Sheets нээж <code>Extensions → Apps Script</code> руу орно<br>
+        <b>Алхам 2.</b> Доорх Apps Script кодыг буулгаж <code>Deploy → New deployment → Web app</code> хийнэ<br>
+        <b>Алхам 3.</b> "Execute as: Me", "Who has access: Anyone" сонгоно<br>
+        <b>Алхам 4.</b> Гарсан <b>Web app URL</b>-ийг доор буулгана
       </div>
-      <div class="sb-worker-wrap">
-        <input class="sb-worker-inp" id="sb-worker" placeholder="Хянасан ажилтан..." oninput="syncW(this)"/>
+      <div class="cfg-row">
+        <label>Apps Script Web App URL</label>
+        <input id="cfg-url" placeholder="https://script.google.com/macros/s/..." />
       </div>
-      <div class="sb-lbl">Тасаг сонгох</div>
-      <div class="tasag-pills" id="sb-tasags"></div>
-      <div class="sb-lbl">Хяналтын зүйлс</div>
-      <div class="sbnav" id="sb-nav"></div>
-      <div class="sbfoot">
-        <div class="progbar"><div class="progfill" id="sb-prog"></div></div>
-        <div class="prog-row"><span id="sb-prog-txt">0/12</span><span id="sb-prog-pct">0%</span></div>
+      <div class="cfg-row">
+        <label>Apps Script код (хуулж Apps Script-д буулгана)</label>
+        <textarea id="cfg-script" rows="6" readonly onclick="this.select()" style="font-family:monospace;font-size:10.5px"></textarea>
       </div>
-    </div>
-
-    <!-- Main -->
-    <div class="mn">
-      <div class="topbar">
-        <span class="tbtitle" id="top-title">ХАБЭА — Өдөр дутмын хяналт</span>
-        <div class="sync-badge" id="sync-badge"><span class="sync-dot"></span><span id="sync-txt">—</span></div>
-        <button class="ib" onclick="openCfg()" title="Google Sheets тохиргоо"><i class="ti ti-cloud"></i></button>
-        <button class="bsec" id="btn-save" onclick="saveDay()" style="font-size:11px"><i class="ti ti-cloud-upload" style="font-size:12px"></i> Хадгалах</button>
-        <button class="ib" onclick="resetDay()" title="Шинэ өдөр"><i class="ti ti-refresh"></i></button>
-        <button class="ib" onclick="openReport()" title="Сарын тайлан"><i class="ti ti-chart-bar"></i></button>
-        <button class="ib" onclick="openChpw()" title="ПИН солих"><i class="ti ti-lock"></i></button>
-        <button class="ib" onclick="doLogout()" title="Гарах" style="color:var(--red);border-color:var(--red)"><i class="ti ti-logout"></i></button>
+      <div class="cfg-status" id="cfg-status"></div>
+      <div class="cfg-btns">
+        <button class="btn-cfg-test" onclick="testConn()">🔗 Холболт шалгах</button>
+        <button class="btn-cfg-save" onclick="saveCfg()">Хадгалах</button>
       </div>
-
-      <!-- Warn banner -->
-      <div class="warn-banner" id="warn-banner">
-        <i class="ti ti-alert-triangle" style="font-size:15px;flex-shrink:0"></i>
-        <span id="warn-text" style="flex:1"></span>
-        <span class="warn-close" onclick="this.parentElement.classList.remove('show')">✕</span>
-      </div>
-
-      <!-- Date nav -->
-      <div class="date-nav">
-        <button class="dn-btn" onclick="shiftDay(-1)"><i class="ti ti-chevron-left" style="font-size:14px"></i></button>
-        <span class="dn-label" id="dn-label"></span>
-        <button class="dn-today" onclick="goToday()">Өнөөдөр</button>
-        <button class="dn-btn" onclick="shiftDay(1)"><i class="ti ti-chevron-right" style="font-size:14px"></i></button>
-      </div>
-
-      <!-- Stat row -->
-      <div style="padding:10px 14px 0">
-        <div class="srow">
-          <div class="scard"><div class="slbl"><i class="ti ti-check" style="font-size:10px"></i> Хийсэн</div><div class="sval cg" id="st-done">0</div></div>
-          <div class="scard"><div class="slbl"><i class="ti ti-alert-triangle" style="font-size:10px"></i> Зөрчил</div><div class="sval cr" id="st-vio">0</div></div>
-          <div class="scard"><div class="slbl"><i class="ti ti-clock" style="font-size:10px"></i> Үлдсэн</div><div class="sval cb" id="st-left">12</div></div>
-          <div class="scard"><div class="slbl"><i class="ti ti-percentage" style="font-size:10px"></i> Гүйцэтгэл</div><div class="sval" id="st-pct">0%</div></div>
-        </div>
-      </div>
-
-      <!-- Cards -->
-      <div class="ct" id="content-area"></div>
-
-      <!-- Vlog -->
-      <div class="vlog-section">
-        <div class="vl-hdr">
-          <span class="vl-title"><i class="ti ti-alert-triangle" style="font-size:11px;vertical-align:-1px;margin-right:4px"></i>Зөрчлийн бүртгэл</span>
-          <span class="vl-cnt" id="vl-cnt" style="display:none"></span>
-        </div>
-        <div class="vlog-list" id="vlog-list"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ REPORT MODAL ═══ -->
-<div class="mo" id="modal-rpt" onclick="if(event.target===this)closeRpt()">
-  <div class="mbox" style="max-width:860px">
-    <div class="mh">
-      <h3 class="mt2" id="rpt-title">Сарын тайлан</h3>
-      <div style="display:flex;gap:7px;align-items:center">
-        <div class="month-sel-row"><label>Сар:</label><select id="rpt-month" onchange="renderReport()"></select><label>Он:</label><select id="rpt-year" onchange="renderReport()"></select></div>
-        <button class="bsec" onclick="dlReport()"><i class="ti ti-download" style="font-size:12px"></i> Татах</button>
-        <button class="bpri" onclick="window.print()"><i class="ti ti-printer" style="font-size:12px"></i> Хэвлэх</button>
-        <button class="ib" onclick="closeRpt()"><i class="ti ti-x"></i></button>
-      </div>
-    </div>
-    <div id="rpt-body" style="overflow-y:auto;max-height:72vh"></div>
-  </div>
-</div>
-
-<!-- ═══ CFG MODAL ═══ -->
-<div class="mo" id="modal-cfg" onclick="if(event.target===this)closeCfg()">
-  <div class="mbox" style="max-width:540px">
-    <div class="mh"><h3 class="mt2"><i class="ti ti-cloud" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Google Sheets тохиргоо</h3><button class="ib" onclick="closeCfg()"><i class="ti ti-x"></i></button></div>
-    <div class="cfg-hint">
-      <b>1.</b> Google Sheets → <code>Extensions → Apps Script</code><br>
-      <b>2.</b> Доорх кодыг буулгаж <code>Deploy → New deployment → Web app</code><br>
-      <b>3.</b> "Execute as: <b>Me</b>" | "Who has access: <b>Anyone</b>" → Deploy<br>
-      <b>4.</b> Гарсан URL-ийг доор буулгаж Хадгалах дарна
-    </div>
-    <div class="fgrp"><label class="flbl">Apps Script Web App URL</label><input class="fi2" id="cfg-url" placeholder="https://script.google.com/macros/s/..."/></div>
-    <div class="fgrp"><label class="flbl">Apps Script код — дарж сонгоод хуулна уу</label><textarea class="fi2" id="cfg-code" rows="7" readonly onclick="this.select()" style="font-family:monospace;font-size:10.5px;resize:none"></textarea></div>
-    <div class="cfg-status" id="cfg-status"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">
-      <button class="bgh" onclick="testConn()"><i class="ti ti-link" style="font-size:12px;vertical-align:-1px;margin-right:3px"></i>Шалгах</button>
-      <button class="bgh" onclick="closeCfg()">Болих</button>
-      <button class="bpri" onclick="saveCfg()"><i class="ti ti-check" style="font-size:11px"></i> Хадгалах</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ CHPW MODAL ═══ -->
-<div class="mo" id="modal-chpw" onclick="if(event.target===this)closeChpw()">
-  <div class="mbox" style="max-width:400px">
-    <div class="mh"><h3 class="mt2"><i class="ti ti-lock" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>ПИН код солих</h3><button class="ib" onclick="closeChpw()"><i class="ti ti-x"></i></button></div>
-    <div style="font-size:11.5px;color:var(--tx2);background:var(--bg3);border-radius:var(--rm);padding:9px 12px;margin-bottom:12px">ПИН дор хаяж <b>4 оронтой</b> байх ёстой.</div>
-    <div class="fgrp"><label class="flbl">Одоогийн ПИН</label><input class="fi2" id="cpw-old" type="password" inputmode="numeric" placeholder="••••"/></div>
-    <div class="fgrp"><label class="flbl">Шинэ ПИН</label><input class="fi2" id="cpw-n1" type="password" inputmode="numeric" placeholder="••••"/></div>
-    <div class="fgrp"><label class="flbl">Шинэ ПИН давтах</label><input class="fi2" id="cpw-n2" type="password" inputmode="numeric" placeholder="••••" onkeydown="if(event.key==='Enter')doChpw()"/></div>
-    <div class="cfg-status" id="cpw-status"></div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:9px;border-top:1px solid var(--bdr)">
-      <button class="bgh" onclick="closeChpw()">Болих</button>
-      <button class="bpri" onclick="doChpw()"><i class="ti ti-check" style="font-size:11px"></i> Солих</button>
     </div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-// CONSTANTS
-// ══════════════════════════════════════════════════════════
 const ITEMS=[
   "Зарлан мэдээлэх чанга яригчаар ХАБЭА-н зааварчилгаа өгөх",
   "Өдөр дутмын зааварчилгаанд хяналт тавих",
@@ -617,368 +491,281 @@ const ITEMS=[
 const TASAGS=["Оёдол","Гүйцэтгэх","Эсгүүр","Гоёл","Оффис","Агуулах"];
 const MN_MONTHS=["1-р сар","2-р сар","3-р сар","4-р сар","5-р сар","6-р сар","7-р сар","8-р сар","9-р сар","10-р сар","11-р сар","12-р сар"];
 const MN_WDAYS=["Ням","Дав","Мяг","Лха","Пүр","Баа","Бям"];
-const WARN_THRESHOLD=3,DANGER_THRESHOLD=5;
-const DEFAULT_PIN='9761';
 
+// ── Apps Script код ──
 const AS_CODE=`// ХАБЭА өдөр дутмын хяналт — Google Apps Script
 // Deploy → New deployment → Web app
 // Execute as: Me | Who has access: Anyone
-const SHEET_NAME='ХАБЭА_бүртгэл';
-function doGet(e){
-  const a=e.parameter.action;
-  if(a==='ping')return ok({status:'ok',time:new Date().toISOString()});
-  if(a==='load')return loadData(e.parameter.dateKey);
-  if(a==='loadMonth')return loadMonth(e.parameter.year,e.parameter.month);
-  return ok({error:'unknown'});
+
+const SHEET_NAME = 'ХАБЭА_бүртгэл';
+
+function doGet(e) {
+  const action = e.parameter.action;
+  if (action === 'ping') return ok({status:'ok',time:new Date().toISOString()});
+  if (action === 'load') return loadData(e.parameter.dateKey);
+  if (action === 'loadMonth') return loadMonth(e.parameter.year, e.parameter.month);
+  return ok({error:'unknown action'});
 }
-function doPost(e){
-  try{const d=JSON.parse(e.postData.contents);if(d.action==='save')return saveData(d);}
-  catch(err){return ok({error:err.message});}
-  return ok({error:'unknown'});
+
+function doPost(e) {
+  try {
+    const d = JSON.parse(e.postData.contents);
+    if (d.action === 'save') return saveData(d);
+    return ok({error:'unknown action'});
+  } catch(err) { return ok({error:err.message}); }
 }
-function getSheet(){
-  const ss=SpreadsheetApp.getActiveSpreadsheet();
-  let sh=ss.getSheetByName(SHEET_NAME);
-  if(!sh){
-    sh=ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['dateKey','tasag','worker','done','violations','fixStatus','savedAt','rawState']);
+
+function getSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(['dateKey','tasag','worker','done','violations','savedAt','rawState']);
     sh.setFrozenRows(1);
-    sh.getRange(1,1,1,8).setFontWeight('bold').setBackground('#0C447C').setFontColor('#fff');
-    [1,2,3,4,5,6,7,8].forEach((c,i)=>sh.setColumnWidth(c,[100,80,100,60,250,120,140,400][i]));
+    sh.getRange(1,1,1,7).setFontWeight('bold').setBackground('#0C447C').setFontColor('#fff');
+    sh.setColumnWidth(1,100);sh.setColumnWidth(2,80);sh.setColumnWidth(3,100);
+    sh.setColumnWidth(5,200);sh.setColumnWidth(7,400);
   }
   return sh;
 }
-function saveData(d){
-  const sh=getSheet();const data=sh.getDataRange().getValues();
-  let ri=-1;for(let i=1;i<data.length;i++){if(data[i][0]===d.dateKey){ri=i+1;break;}}
-  const vd=d.state.filter(s=>s.vio).map((s,i)=>{const idx=d.state.indexOf(s);let t=(idx+1)+'. '+s.vio;if(s.vioWorker)t+=' ['+s.vioWorker+']';return t;}).join(' | ');
-  const fs=d.state.filter(s=>s.vio).map(s=>s.fixed?'✓ Арилсан':'⏳ Арилаагүй').join(' | ');
-  const done=d.state.filter(s=>s.done).length;
-  const row=[d.dateKey,d.tasag||'',d.worker||'',done+'/'+d.state.length,vd,fs,new Date().toLocaleString('mn-MN'),JSON.stringify(d.state)];
-  if(ri>0)sh.getRange(ri,1,1,8).setValues([row]);else sh.appendRow(row);
-  return ok({status:'saved',dateKey:d.dateKey});
+
+function saveData(d) {
+  const sh = getSheet();
+  const data = sh.getDataRange().getValues();
+  const headers = data[0];
+  const keyCol = headers.indexOf('dateKey');
+  let rowIdx = -1;
+  for (let i=1;i<data.length;i++) {
+    if (data[i][keyCol] === d.dateKey) { rowIdx = i+1; break; }
+  }
+  const violations = d.state.filter(s=>s.vio).map((s,i)=>s.vio?(i+1)+'. '+s.vio:'').filter(Boolean).join(' | ');
+  const done = d.state.filter(s=>s.done).length;
+  const row = [d.dateKey, d.tasag||'', d.worker||'', done+'/'+d.state.length, violations, new Date().toLocaleString('mn-MN'), JSON.stringify(d.state)];
+  if (rowIdx > 0) {
+    sh.getRange(rowIdx,1,1,7).setValues([row]);
+  } else {
+    sh.appendRow(row);
+  }
+  return ok({status:'saved', dateKey:d.dateKey});
 }
-function loadData(dateKey){
-  const sh=getSheet();const data=sh.getDataRange().getValues();
-  for(let i=1;i<data.length;i++){
-    if(data[i][0]===dateKey){
-      try{return ok({found:true,dateKey,tasag:data[i][1],worker:data[i][2],state:JSON.parse(data[i][7])});}catch(e){}
+
+function loadData(dateKey) {
+  const sh = getSheet();
+  const data = sh.getDataRange().getValues();
+  for (let i=1;i<data.length;i++) {
+    if (data[i][0] === dateKey) {
+      try {
+        const state = JSON.parse(data[i][6]);
+        return ok({found:true, dateKey:dateKey, tasag:data[i][1], worker:data[i][2], state:state});
+      } catch(e) {}
     }
   }
-  return ok({found:false,dateKey});
+  return ok({found:false, dateKey:dateKey});
 }
-function loadMonth(year,month){
-  const sh=getSheet();const data=sh.getDataRange().getValues();
-  const mo=parseInt(month);const pf=year+'-'+(mo<10?'0':'')+mo;const rows=[];
-  for(let i=1;i<data.length;i++){
-    if(String(data[i][0]).startsWith(pf)){
-      try{rows.push({dateKey:data[i][0],tasag:data[i][1],worker:data[i][2],done:data[i][3],violations:data[i][4],fixStatus:data[i][5],state:JSON.parse(data[i][7])});}
-      catch(e){rows.push({dateKey:data[i][0],tasag:data[i][1],worker:data[i][2],done:data[i][3],violations:data[i][4],fixStatus:data[i][5]||'',state:[]});}
+
+function loadMonth(year, month) {
+  const sh = getSheet();
+  const data = sh.getDataRange().getValues();
+  const prefix = year+'-'+(parseInt(month)<10?'0':'')+parseInt(month);
+  const rows = [];
+  for (let i=1;i<data.length;i++) {
+    if (String(data[i][0]).startsWith(prefix)) {
+      try {
+        rows.push({dateKey:data[i][0],tasag:data[i][1],worker:data[i][2],done:data[i][3],violations:data[i][4],state:JSON.parse(data[i][6])});
+      } catch(e) { rows.push({dateKey:data[i][0],tasag:data[i][1],worker:data[i][2],done:data[i][3],violations:data[i][4],state:[]}); }
     }
   }
-  return ok({rows});
-}
-function ok(obj){return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);}`;
-
-// ══════════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════════
-let cfg=JSON.parse(localStorage.getItem('habea_cfg')||'{}');
-let localLog=JSON.parse(localStorage.getItem('habea_log')||'{}');
-let tasag="",active=0;
-let curDate=new Date();curDate.setHours(0,0,0,0);
-let state=newState();
-let pinBuf='';
-
-function newState(){return ITEMS.map(()=>({done:false,vio:"",vioWorker:"",fixed:false,fixNote:"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));}
-function save(){localStorage.setItem('habea_cfg',JSON.stringify(cfg));localStorage.setItem('habea_log',JSON.stringify(localLog));}
-function toast(m){var t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-
-// ══════════════════════════════════════════════════════════
-// AUTH — PIN
-// ══════════════════════════════════════════════════════════
-function _hash(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return 'h'+Math.abs(h).toString(36)+'x'+(s.length*7).toString(36);}
-function getPin(){return localStorage.getItem('habea_pin')||_hash(DEFAULT_PIN);}
-function upDots(buf,pfx){for(let i=0;i<4;i++){const el=document.getElementById((pfx||'pd')+i);if(el){el.classList.remove('on','er');if(i<buf.length)el.classList.add('on');}}}
-
-function pi(v){
-  if(pinBuf.length>=4)return;
-  pinBuf+=v;upDots(pinBuf);
-  if(pinBuf.length===4){
-    setTimeout(()=>{
-      if(_hash(pinBuf)===getPin()){
-        document.getElementById('pin-screen').classList.remove('open');
-        document.getElementById('app').style.display='block';
-        pinBuf='';upDots('');
-        document.getElementById('perr').textContent='';
-        bootApp();
-      } else {
-        document.getElementById('perr').textContent='ПИН код буруу байна!';
-        for(let i=0;i<4;i++){const el=document.getElementById('pd'+i);if(el){el.classList.remove('on');el.classList.add('er');}}
-        const d=document.getElementById('pdots');if(d)d.classList.add('shk');
-        setTimeout(()=>{pinBuf='';upDots('');document.getElementById('perr').textContent='';const d2=document.getElementById('pdots');if(d2)d2.classList.remove('shk');},650);
-      }
-    },80);
-  }
-}
-function pdel(){if(pinBuf.length>0){pinBuf=pinBuf.slice(0,-1);upDots(pinBuf);document.getElementById('perr').textContent='';}}
-
-function doLogout(){
-  if(!confirm('Системээс гарах уу?'))return;
-  document.getElementById('app').style.display='none';
-  document.getElementById('pin-screen').classList.remove('open');
-  document.getElementById('landing').style.display='flex';
-  document.getElementById('share-screen').classList.remove('open');
-  pinBuf='';upDots('');
+  return ok({rows:rows});
 }
 
-// Change PIN
-function openChpw(){['cpw-old','cpw-n1','cpw-n2'].forEach(id=>document.getElementById(id).value='');document.getElementById('cpw-status').className='cfg-status';document.getElementById('modal-chpw').classList.add('op');setTimeout(()=>document.getElementById('cpw-old').focus(),80);}
-function closeChpw(){document.getElementById('modal-chpw').classList.remove('op');}
-function doChpw(){
-  const old=(document.getElementById('cpw-old').value||'').trim();
-  const n1=(document.getElementById('cpw-n1').value||'').trim();
-  const n2=(document.getElementById('cpw-n2').value||'').trim();
-  const st=document.getElementById('cpw-status');
-  function err(m){st.className='cfg-status err';st.textContent=m;}
-  if(!old||!n1||!n2)return err('Бүх талбарыг бөглөнө үү.');
-  if(_hash(old)!==getPin())return err('Одоогийн ПИН буруу байна.');
-  if(n1.length<4)return err('Дор хаяж 4 оронтой байх ёстой.');
-  if(n1!==n2)return err('Шинэ ПИН таарахгүй байна.');
-  if(n1===old)return err('Өмнөхтэй ижил байна.');
-  localStorage.setItem('habea_pin',_hash(n1));
-  st.className='cfg-status ok';st.textContent='✅ ПИН амжилттай солигдлоо!';
-  setTimeout(()=>closeChpw(),1500);
-  toast('ПИН солигдлоо!');
-}
+function ok(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}`;
 
-// ══════════════════════════════════════════════════════════
-// LANDING NAVIGATION
-// ══════════════════════════════════════════════════════════
-function showPinScreen(){
-  document.getElementById('landing').style.display='none';
-  document.getElementById('pin-screen').classList.add('open');
-  pinBuf='';upDots('');document.getElementById('perr').textContent='';
-}
-function showShareScreen(){
-  document.getElementById('landing').style.display='none';
-  document.getElementById('share-screen').classList.add('open');
-  const url=location.href;
-  document.getElementById('share-url').textContent=url;
-}
-function backToLanding(){
-  ['pin-screen','share-screen'].forEach(id=>document.getElementById(id).classList.remove('open'));
-  document.getElementById('landing').style.display='flex';
-}
-function copyShareURL(){
-  const url=document.getElementById('share-url').textContent;
-  navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>{
-    const m=document.getElementById('share-copied');m.textContent='✅ Хуулагдлаа!';setTimeout(()=>m.textContent='',2000);
-  }).catch(()=>toast(url));
-}
+// ── config ──
+let cfg = JSON.parse(localStorage.getItem('habea_cfg')||'{}');
+let localLog = JSON.parse(localStorage.getItem('habea_log')||'{}');
 
-// ══════════════════════════════════════════════════════════
-// DATE / TIME
-// ══════════════════════════════════════════════════════════
-function dateKey(d){return d.toISOString().slice(0,10);}
-function todayKey(){const t=new Date();t.setHours(0,0,0,0);return dateKey(t);}
-function fmtDate(d){return d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});}
-function fmtShort(d){return d.toLocaleDateString('mn-MN',{year:'numeric',month:'short',day:'numeric'});}
+// ── state ──
+let tasag="", active=0;
+let curDate=new Date(); curDate.setHours(0,0,0,0);
+let state=ITEMS.map(()=>({done:false,vio:"",vworker:"",form:false,draft:"",wdraft:""}));
+
+function dateKey(d){return d.toISOString().slice(0,10)}
+function todayKey(){const t=new Date();t.setHours(0,0,0,0);return dateKey(t)}
+function fmtDate(d){return d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})}
+function fmtShort(d){return d.toLocaleDateString('mn-MN',{year:'numeric',month:'short',day:'numeric'})}
+
 function tickDate(){
   const d=new Date();
-  const s=d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})+' '+d.toLocaleTimeString('mn-MN',{hour:'2-digit',minute:'2-digit'});
-  const el=document.getElementById('dn-label');
-  if(el)el.textContent=fmtShort(curDate)+(dateKey(curDate)===todayKey()?' · Өнөөдөр':'');
+  document.getElementById('hdr-date').textContent=d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})+' '+d.toLocaleTimeString('mn-MN',{hour:'2-digit',minute:'2-digit'});
 }
-setInterval(tickDate,10000);
+tickDate(); setInterval(tickDate,10000);
 
-// ══════════════════════════════════════════════════════════
-// SYNC / SHEETS
-// ══════════════════════════════════════════════════════════
-function setSyncBadge(s,t){
-  ['sync-badge','mob-sync'].forEach(id=>{const b=document.getElementById(id);if(b)b.className=id==='sync-badge'?('sync-badge '+(s||'')):('mob-sync '+(s||''));});
-  ['sync-txt','mob-sync-txt'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
+function setSyncBadge(status, txt){
+  const b=document.getElementById('sync-badge');
+  if(b){b.className='hdr-sync '+(status||'');}
+  const st=document.getElementById('sync-txt');
+  if(st)st.textContent=txt;
+  const mb=document.getElementById('mob-sync-badge');
+  if(mb)mb.style.color=status==='ok'?'#5DCAA5':status==='err'?'#F09595':'rgba(255,255,255,.5)';
+  const ms=document.getElementById('mob-sync-txt');
+  if(ms)ms.textContent=txt||'—';
 }
-function syncW(src){
-  const v=src.value;
-  ['sb-worker','drw-worker'].forEach(id=>{const el=document.getElementById(id);if(el&&el!==src)el.value=v;});
-}
-function getWorker(){return document.getElementById('sb-worker')?.value||document.getElementById('drw-worker')?.value||"";}
 
+// ── Sheets API ──
 async function sheetsGet(params){
-  if(!cfg.url)throw new Error('URL тохируулаагүй');
+  const url=cfg.url;
+  if(!url)throw new Error('URL тохируулаагүй');
   const q=Object.entries(params).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
-  const r=await fetch(cfg.url+'?'+q);if(!r.ok)throw new Error('HTTP '+r.status);
+  const r=await fetch(url+'?'+q);
+  if(!r.ok)throw new Error('HTTP '+r.status);
   return await r.json();
 }
 async function sheetsPost(body){
-  if(!cfg.url)throw new Error('URL тохируулаагүй');
-  const r=await fetch(cfg.url,{method:'POST',body:JSON.stringify(body)});if(!r.ok)throw new Error('HTTP '+r.status);
+  const url=cfg.url;
+  if(!url)throw new Error('URL тохируулаагүй');
+  const r=await fetch(url,{method:'POST',body:JSON.stringify(body)});
+  if(!r.ok)throw new Error('HTTP '+r.status);
   return await r.json();
 }
-function stateToSave(){return state.map(s=>({done:s.done,vio:s.vio,vioWorker:s.vioWorker||"",fixed:s.fixed||false,fixNote:s.fixNote||""}));}
 
 async function loadFromSheets(d){
   const k=dateKey(d);
-  try{
+  try {
     setSyncBadge('syncing','Ачааллаж байна…');
     const res=await sheetsGet({action:'load',dateKey:k});
     if(res.found){
       tasag=res.tasag||"";
-      const w=res.worker||"";
-      document.querySelectorAll('#sb-worker,#drw-worker').forEach(el=>el.value=w);
-      state=ITEMS.map((_,i)=>({done:res.state[i]?.done||false,vio:res.state[i]?.vio||"",vioWorker:res.state[i]?.vioWorker||"",fixed:res.state[i]?.fixed||false,fixNote:res.state[i]?.fixNote||"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));
-      localLog[k]={tasag,worker:w,state:stateToSave()};save();
+      document.getElementById('inp-worker').value=res.worker||"";
+      state=ITEMS.map((_,i)=>({done:res.state[i]?.done||false,vio:res.state[i]?.vio||"",vworker:res.state[i]?.vworker||"",form:false,draft:"",wdraft:""}));
+      localLog[k]={tasag,worker:res.worker||"",state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||''}))};
+      localStorage.setItem('habea_log',JSON.stringify(localLog));
       setSyncBadge('ok','Sheets-с уншлаа');
-    }else setSyncBadge('ok','Sheets холбогдсон');
-  }catch(e){setSyncBadge('err','Sheets алдаа');loadFromLocal(d);}
+    } else {
+      setSyncBadge('ok','Sheets холбогдсон');
+    }
+  } catch(e){
+    setSyncBadge('err','Sheets алдаа');
+    loadFromLocal(d);
+  }
 }
+
 function loadFromLocal(d){
-  const k=dateKey(d);const s=localLog[k];
-  if(s){
-    tasag=s.tasag||"";
-    const w=s.worker||"";document.querySelectorAll('#sb-worker,#drw-worker').forEach(el=>el.value=w);
-    state=ITEMS.map((_,i)=>({done:s.state[i]?.done||false,vio:s.state[i]?.vio||"",vioWorker:s.state[i]?.vioWorker||"",fixed:s.state[i]?.fixed||false,fixNote:s.state[i]?.fixNote||"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));
-  }else{tasag="";document.querySelectorAll('#sb-worker,#drw-worker').forEach(el=>el.value="");state=newState();}
+  const k=dateKey(d);
+  const saved=localLog[k];
+  if(saved){
+    tasag=saved.tasag||"";
+    document.getElementById('inp-worker').value=saved.worker||"";
+    state=ITEMS.map((_,i)=>({done:saved.state[i]?.done||false,vio:saved.state[i]?.vio||"",vworker:saved.state[i]?.vworker||"",form:false,draft:"",wdraft:""}));
+  } else {
+    tasag=""; document.getElementById('inp-worker').value="";
+    state=ITEMS.map(()=>({done:false,vio:"",form:false,draft:""}));
+  }
 }
 
 async function saveDay(){
-  const btn=document.getElementById('btn-save');if(btn){btn.disabled=true;btn.textContent='…';}
-  const k=dateKey(curDate);const worker=getWorker();const saved=stateToSave();
-  localLog[k]={tasag,worker,state:saved,savedAt:new Date().toISOString()};save();
-  checkWarning();
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true; btn.textContent='…';
+  const k=dateKey(curDate);
+  const worker=document.getElementById('inp-worker').value||"";
+  const payload={action:'save',dateKey:k,tasag,worker,state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||''}))};
+  // always save locally first
+  localLog[k]={tasag,worker,state:payload.state,savedAt:new Date().toISOString()};
+  localStorage.setItem('habea_log',JSON.stringify(localLog));
   if(cfg.url){
-    try{setSyncBadge('syncing','Хадгалж байна…');await sheetsPost({action:'save',dateKey:k,tasag,worker,state:saved});setSyncBadge('ok','Хадгалагдлаа ✓');toast('Google Sheets-д хадгалагдлаа!');}
-    catch(e){setSyncBadge('err','Sheets алдаа');toast('Нутагт хадгаллаа.');}
-  }else{setSyncBadge('','Нутагт хадгаллаа');toast('Нутагт хадгаллаа.');}
-  if(btn)setTimeout(()=>{btn.disabled=false;btn.innerHTML='<i class="ti ti-cloud-upload" style="font-size:12px"></i> Хадгалах';},2200);
-}
-async function manualSync(){
-  if(!cfg.url){toast('Эхлээд ⚙ Sheets тохиргоо хийнэ үү.');return;}
-  setSyncBadge('syncing','Sync…');
-  try{await loadFromSheets(curDate);render();checkWarning();toast('Sync дууслаа!');}
-  catch(e){setSyncBadge('err','Алдаа');}
+    try {
+      setSyncBadge('syncing','Хадгалж байна…');
+      await sheetsPost(payload);
+      setSyncBadge('ok','Sheets-д хадгалагдлаа ✓');
+      btn.textContent='☁ Хадгалагдлаа';
+    } catch(e){
+      setSyncBadge('err','Sheets алдаа — нутагт хадгаллаа');
+      btn.textContent='💾 Нутагт хадгаллаа';
+    }
+  } else {
+    setSyncBadge('','Нутагт хадгаллаа');
+    btn.textContent='💾 Хадгаллаа';
+  }
+  setTimeout(()=>{btn.disabled=false;btn.textContent='☁ Хадгалах';},2500);
 }
 
 function loadDay(d){
-  d=new Date(d);d.setHours(0,0,0,0);curDate=d;active=0;
-  tasag="";document.querySelectorAll('#sb-worker,#drw-worker').forEach(el=>el.value="");state=newState();
-  if(cfg.url)loadFromSheets(d).then(()=>{render();checkWarning();});
-  else{loadFromLocal(d);checkWarning();}
+  d=new Date(d); d.setHours(0,0,0,0);
+  curDate=d; active=0;
+  tasag=""; document.getElementById('inp-worker').value="";
+  state=ITEMS.map(()=>({done:false,vio:"",form:false,draft:""}));
+  if(cfg.url){ loadFromSheets(d).then(()=>render()); }
+  else { loadFromLocal(d); }
   render();
 }
+
 function shiftDay(n){
-  const d=new Date(curDate);d.setDate(d.getDate()+n);
-  const today=new Date();today.setHours(0,0,0,0);
-  if(d>today){toast('Ирээдүйн өдрийн бүртгэл хийх боломжгүй.');return;}
+  const d=new Date(curDate); d.setDate(d.getDate()+n);
+  const today=new Date(); today.setHours(0,0,0,0);
+  if(d>today){alert('Ирээдүйн өдрийн бүртгэл хийх боломжгүй.');return;}
   loadDay(d);
 }
 function goToday(){loadDay(new Date());}
+
 function resetDay(){
   if(!confirm('Энэ өдрийн бүртгэлийг арилгах уу?'))return;
-  delete localLog[dateKey(curDate)];save();
-  tasag="";document.querySelectorAll('#sb-worker,#drw-worker').forEach(el=>el.value="");state=newState();active=0;render();
-  toast('Арилгагдлаа.');
+  const k=dateKey(curDate);
+  delete localLog[k];
+  localStorage.setItem('habea_log',JSON.stringify(localLog));
+  tasag=""; document.getElementById('inp-worker').value="";
+  state=ITEMS.map(()=>({done:false,vio:"",form:false,draft:""}));
+  active=0; render();
 }
 
-// ══════════════════════════════════════════════════════════
-// WARNING SYSTEM
-// ══════════════════════════════════════════════════════════
-function calcWorkerStats(rows){
-  const stats={};
-  rows.forEach(r=>{(r.state||[]).forEach(s=>{if(s.vio&&s.vioWorker){const w=s.vioWorker.trim();if(!stats[w])stats[w]={total:0,open:0,fixed:0,items:[]};stats[w].total++;if(s.fixed)stats[w].fixed++;else stats[w].open++;stats[w].items.push({date:r.dateKey,vio:s.vio,fixed:s.fixed});}});});
-  return stats;
-}
-function checkWarning(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const rows=[];
-  for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);const k=dateKey(d);const e=localLog[k];if(e)rows.push({dateKey:k,state:e.state||[]});}
-  const stats=calcWorkerStats(rows);
-  const warns=[];
-  Object.entries(stats).forEach(([w,s])=>{if(s.total>=DANGER_THRESHOLD)warns.push({w,s,level:'danger'});else if(s.total>=WARN_THRESHOLD)warns.push({w,s,level:'warn'});});
-  const banner=document.getElementById('warn-banner');
-  if(warns.length){
-    document.getElementById('warn-text').innerHTML='Анхааруулга: '+warns.map(({w,s,level})=>`${level==='danger'?'🚨':'⚠️'} <b>${w}</b> — 7 хоногт <b>${s.total} зөрчил</b> (${s.open} арилаагүй)`).join(' &nbsp;|&nbsp; ');
-    banner.classList.add('show');
-  }else banner.classList.remove('show');
-}
+// ── tasag buttons ──
+const tbEl=document.getElementById('tasag-btns');
+TASAGS.forEach(t=>{
+  const b=document.createElement('button');
+  b.className='tg-btn'; b.textContent=t;
+  b.onclick=()=>{tasag=tasag===t?"":t; render();};
+  tbEl.appendChild(b);
+});
 
-// ══════════════════════════════════════════════════════════
-// BUILD TASAG BUTTONS
-// ══════════════════════════════════════════════════════════
-function buildTasagBtns(){
-  ['sb-tasags','drw-tasags'].forEach(id=>{
-    const el=document.getElementById(id);if(!el)return;el.innerHTML='';
-    TASAGS.forEach(t=>{
-      const b=document.createElement('button');
-      b.className='tpill';b.textContent=t;
-      b.onclick=()=>{tasag=tasag===t?"":t;render();};
-      el.appendChild(b);
-    });
-  });
-}
-
-// ══════════════════════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════════════════════
+// ── render ──
 function render(){
-  tickDate();
-  document.querySelectorAll('.tpill').forEach(b=>b.classList.toggle('sel',b.textContent===tasag));
-  document.getElementById('top-title').textContent='ХАБЭА'+(tasag?' — '+tasag+' тасаг':'')+(dateKey(curDate)===todayKey()?' · Өнөөдөр':' · '+fmtShort(curDate));
-  document.getElementById('mob-title').textContent='ХАБЭА'+(tasag?' — '+tasag:'');
+  document.querySelector('.date-nav .dn-label').textContent=fmtDate(curDate)+(dateKey(curDate)===todayKey()?' — Өнөөдөр':'');
+  document.querySelectorAll('.tg-btn').forEach(b=>b.classList.toggle('sel',b.textContent===tasag));
+  document.getElementById('tb-title').textContent=tasag||'Тасаг сонгоно уу';
+  document.getElementById('tb-sub').textContent=(tasag?'ХАБЭА '+tasag+' тасаг — ':'ХАБЭА — ')+fmtShort(curDate);
 
   const done=state.filter(s=>s.done).length;
   const vios=state.filter(s=>s.vio).length;
-  const pct=Math.round(done/ITEMS.length*100);
   document.getElementById('st-done').textContent=done;
   document.getElementById('st-vio').textContent=vios;
   document.getElementById('st-left').textContent=ITEMS.length-done;
-  document.getElementById('st-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=Math.round(done/ITEMS.length*100)+'%';
+  document.getElementById('prog-txt').textContent=done+'/'+ITEMS.length;
+  document.getElementById('prog-pct').textContent=Math.round(done/ITEMS.length*100)+'%';
 
-  // sidebar progress
-  const sp=document.getElementById('sb-prog');if(sp)sp.style.width=pct+'%';
-  const spt=document.getElementById('sb-prog-txt');if(spt)spt.textContent=done+'/'+ITEMS.length;
-  const spp=document.getElementById('sb-prog-pct');if(spp)spp.textContent=pct+'%';
-
-  // sidebar nav
-  const sbNav=document.getElementById('sb-nav');
-  const drwNav=document.getElementById('drw-nav');
-  const navHtml=state.map((s,i)=>`
-    <div class="ni${i===active?' active':''}${s.done?' is-done':''}${s.vio?' is-vio':''}" onclick="setActive(${i})">
-      <span class="ni-num">${i+1}</span>
-      <span class="ni-lbl">${ITEMS[i].substring(0,36)}${ITEMS[i].length>36?'…':''}</span>
-      <span class="ni-dot"></span>
+  document.getElementById('sb-nav').innerHTML=state.map((s,i)=>`
+    <div class="sb-item${i===active?' active':''}${s.done?' is-done':''}${s.vio?' is-vio':''}" onclick="setActive(${i})">
+      <span class="sb-num">${i+1}</span>
+      <span class="sb-lbl">${ITEMS[i].substring(0,36)}${ITEMS[i].length>36?'…':''}</span>
+      <span class="sb-dot"></span>
     </div>`).join('');
-  if(sbNav)sbNav.innerHTML=navHtml;
-  if(drwNav)drwNav.innerHTML=navHtml;
 
-  // cards
-  const ckSvg='<svg width="13" height="13" viewBox="0 0 13 13"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const ckSvg='<svg width="13" height="13" viewBox="0 0 13 13"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   document.getElementById('content-area').innerHTML=state.map((s,i)=>`
-    <div class="card${s.done?' is-checked':''}${s.vio?' is-vio':''}${s.vio&&s.fixed?' is-fixed':''}" id="card-${i}">
+    <div class="card${s.done?' is-checked':''}${s.vio?' is-vio':''}" id="card-${i}">
       <div class="card-top">
         <span class="ck-num">${i+1}</span>
         <div class="ck-box" onclick="toggle(${i})">${s.done?ckSvg:''}</div>
         <span class="ck-txt">${ITEMS[i]}</span>
-        <button class="vio-btn" onclick="openForm(${i})"><i class="ti ti-alert-triangle" style="font-size:12px;vertical-align:-1px;margin-right:2px"></i>Зөрчил</button>
+        <button class="vio-btn" onclick="openForm(${i})">⚠ Зөрчил</button>
       </div>
-      ${s.vio?`<div class="vio-tags">
-        <span class="vtag ${s.fixed?'fixed':'open'}"><i class="ti ti-${s.fixed?'check':'clock'}" style="font-size:10px"></i>${s.fixed?'Арилсан':'Арилаагүй'}: ${s.vio}</span>
-        ${s.vioWorker?`<span class="vworker"><i class="ti ti-user" style="font-size:10px"></i>${s.vioWorker}</span>`:''}
-      </div>`:''}
+      ${s.vio?`<div class="vio-tag">🔴 ${s.vio}${s.vworker?` · 👤 ${s.vworker}`:''}</div>`:''}
       ${s.form?`<div class="vio-form">
-        <div class="vf-row"><label class="vf-lbl">Зөрчлийн тайлбар</label>
-          <textarea id="vf-${i}" class="vf-inp ta" rows="2" placeholder="Дэлгэрэнгүй тайлбар...">${s.draft}</textarea></div>
-        <div class="vf-row"><label class="vf-lbl">Зөрчил гаргасан ажилтны нэр</label>
-          <input id="vfw-${i}" class="vf-inp" placeholder="Ажилтны нэр..." value="${s.draftWorker}"/></div>
-        <div class="vf-fix-row" onclick="document.getElementById('vfc-${i}').click()">
-          <input type="checkbox" class="vf-fix-chk" id="vfc-${i}" ${s.draftFixed?'checked':''} onchange="toggleFix(${i})"/>
-          <label class="vf-fix-lbl" for="vfc-${i}" onclick="event.stopPropagation()">✅ Зөрчил арилгасан</label>
-        </div>
-        <div class="vf-fix-note${s.draftFixed?' show':''}" id="vfn-wrap-${i}">
-          <div class="vf-row"><label class="vf-lbl">Арилгасан тэмдэглэл</label>
-            <input id="vfn-${i}" class="vf-inp" placeholder="Хэн, хэзээ, яаж арилгасан..." value="${s.draftFixNote}"/></div>
-        </div>
+        <textarea id="vf-${i}" rows="2" placeholder="Зөрчлийн дэлгэрэнгүй тайлбар...">${s.draft}</textarea>
+        <input id="vfw-${i}" type="text" placeholder="Зөрчил гаргасан ажилтны нэр..." value="${s.vworker||''}"
+          style="width:100%;font-size:12px;padding:6px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);outline:none;margin-top:6px;box-sizing:border-box;transition:border-color .15s"
+          onfocus="this.style.borderColor='var(--blue-m)'" onblur="this.style.borderColor='var(--bdr)'"/>
+        <div style="font-size:11px;color:var(--mut);font-style:italic;margin-top:3px">* нэр бичих шаардлагагүй</div>
         <div class="vf-btns">
           <button class="btn-sm primary" onclick="saveVio(${i})">Хадгалах</button>
           <button class="btn-sm" onclick="closeForm(${i})">Болих</button>
@@ -989,174 +776,173 @@ function render(){
   const ac=document.getElementById('card-'+active);
   if(ac)ac.scrollIntoView({block:'nearest',behavior:'smooth'});
 
-  // vlog
-  const vs=state.map((s,i)=>s.vio?{i:i+1,s}:null).filter(Boolean);
-  const openV=vs.filter(v=>!v.s.fixed).length;
+  const vs=state.map((s,i)=>s.vio?{i:i+1,text:s.vio}:null).filter(Boolean);
   const vc=document.getElementById('vl-cnt');
-  vc.textContent=vs.length+(openV>0?' ('+openV+' арилаагүй)':'');
-  vc.style.display=vs.length?'':'none';
-  vc.className='vl-cnt '+(openV>0?'red':'amb');
+  vc.textContent=vs.length; vc.style.display=vs.length?'':'none';
   document.getElementById('vlog-list').innerHTML=vs.length
-    ?vs.map(({i,s})=>`<div class="vli ${s.fixed?'fixed':'open'}">
-      <div class="vli-n">${i}. ${ITEMS[i-1].substring(0,30)}</div>
-      ${s.vioWorker?`<div class="vli-w"><i class="ti ti-user" style="font-size:10px"></i> ${s.vioWorker}</div>`:''}
-      <div class="vli-t">${s.vio}</div>
-      ${s.fixed&&s.fixNote?`<div class="vli-fn"><i class="ti ti-check" style="font-size:10px"></i> ${s.fixNote}</div>`:''}
-      ${!s.fixed?'<div class="vli-fn"><i class="ti ti-clock" style="font-size:10px"></i> Арилаагүй байна</div>':''}
-    </div>`).join('')
-    :'<div class="empty-log"><i class="ti ti-circle-check" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Зөрчил бүртгэгдээгүй байна</div>';
+    ?vs.map(v=>`<div class="vl-item"><div class="vl-n">${v.i}. ${ITEMS[v.i-1].substring(0,38)}</div><div class="vl-t">${v.text}</div></div>`).join('')
+    :'<div class="empty-log">Одоогоор зөрчил бүртгэгдээгүй байна</div>';
 
   setTimeout(()=>{const t=document.getElementById('vf-'+active);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},40);
+  updateMobUI();
 }
 
 function setActive(i){active=i;render();}
 function toggle(i){state[i].done=!state[i].done;active=i;render();}
-function openForm(i){
-  state.forEach((s,j)=>{if(j!==i)s.form=false;});
-  state[i].form=!state[i].form;
-  state[i].draft=state[i].vio;state[i].draftWorker=state[i].vioWorker||"";
-  state[i].draftFixed=state[i].fixed||false;state[i].draftFixNote=state[i].fixNote||"";
-  active=i;render();
-}
+function openForm(i){state.forEach((s,j)=>{if(j!==i)s.form=false;});state[i].form=!state[i].form;state[i].draft=state[i].vio;state[i].wdraft=state[i].vworker||'';active=i;render();}
 function closeForm(i){state[i].form=false;render();}
-function toggleFix(i){
-  const chk=document.getElementById('vfc-'+i);
-  const wrap=document.getElementById('vfn-wrap-'+i);
-  if(wrap)wrap.className='vf-fix-note'+(chk.checked?' show':'');
-  state[i].draftFixed=chk.checked;
-}
 function saveVio(i){
-  const t=document.getElementById('vf-'+i);const w=document.getElementById('vfw-'+i);
-  const chk=document.getElementById('vfc-'+i);const fn=document.getElementById('vfn-'+i);
-  if(t&&t.value.trim()){state[i].vio=t.value.trim();state[i].vioWorker=w?w.value.trim():"";state[i].fixed=chk?chk.checked:false;state[i].fixNote=fn?fn.value.trim():"";}
-  state[i].form=false;render();checkWarning();
+  const t=document.getElementById('vf-'+i);
+  if(t&&t.value.trim())state[i].vio=t.value.trim();
+  const w=document.getElementById('vfw-'+i);
+  if(w)state[i].vworker=w.value.trim();
+  state[i].form=false;render();checkVioWarning();
 }
-function clearVio(i){state[i].vio='';state[i].vioWorker='';state[i].fixed=false;state[i].fixNote='';state[i].form=false;render();}
+function clearVio(i){state[i].vio='';state[i].form=false;render();}
 
-// ══════════════════════════════════════════════════════════
-// CONFIG MODAL
-// ══════════════════════════════════════════════════════════
-function openCfg(){document.getElementById('cfg-url').value=cfg.url||'';document.getElementById('cfg-code').value=AS_CODE;document.getElementById('cfg-status').className='cfg-status';document.getElementById('modal-cfg').classList.add('op');}
-function closeCfg(){document.getElementById('modal-cfg').classList.remove('op');}
-function saveCfg(){cfg.url=document.getElementById('cfg-url').value.trim();save();closeCfg();if(cfg.url){setSyncBadge('ok','Sheets холбогдсон');loadDay(curDate);}else setSyncBadge('','Тохиргоо хийнэ үү');toast('Тохиргоо хадгалагдлаа!');}
+// ── CONFIG modal ──
+function openCfg(){
+  document.getElementById('cfg-url').value=cfg.url||'';
+  document.getElementById('cfg-script').value=AS_CODE;
+  document.getElementById('cfg-status').style.display='none';
+  document.getElementById('modal-cfg').classList.add('open');
+}
+function closeCfg(){document.getElementById('modal-cfg').classList.remove('open');}
+function saveCfg(){
+  cfg.url=document.getElementById('cfg-url').value.trim();
+  localStorage.setItem('habea_cfg',JSON.stringify(cfg));
+  closeCfg();
+  setSyncBadge(cfg.url?'ok':'','');
+  if(cfg.url){setSyncBadge('ok','Sheets холбогдсон');loadDay(curDate);}
+  else setSyncBadge('','Тохиргоо хийнэ үү');
+}
 async function testConn(){
   const url=document.getElementById('cfg-url').value.trim();
-  const st=document.getElementById('cfg-status');
-  if(!url){st.className='cfg-status err';st.textContent='URL оруулна уу';return;}
-  st.className='cfg-status testing';st.textContent='Шалгаж байна…';
-  try{const r=await fetch(url+'?action=ping');const j=await r.json();if(j.status==='ok'){st.className='cfg-status ok';st.textContent='✅ Амжилттай холбогдлоо!';}else{st.className='cfg-status err';st.textContent='Хариу буруу: '+JSON.stringify(j);}}
-  catch(e){st.className='cfg-status err';st.textContent='Алдаа: '+e.message;}
+  if(!url){showCfgStatus('err','URL оруулна уу');return;}
+  showCfgStatus('testing','Холболт шалгаж байна…');
+  try{
+    const r=await fetch(url+'?action=ping');
+    const j=await r.json();
+    if(j.status==='ok')showCfgStatus('ok','✅ Амжилттай холбогдлоо! Sheets ажиллаж байна.');
+    else showCfgStatus('err','Хариу буруу: '+JSON.stringify(j));
+  }catch(e){showCfgStatus('err','Алдаа: '+e.message+'. URL зөв эсэх болон Deploy хийсэн эсэхийг шалгана уу.');}
+}
+function showCfgStatus(type,txt){
+  const el=document.getElementById('cfg-status');
+  el.className='cfg-status '+type; el.textContent=txt;
 }
 
-// ══════════════════════════════════════════════════════════
-// MODAL helpers
-// ══════════════════════════════════════════════════════════
-function openModal(html){document.getElementById('mbox').innerHTML=html;document.getElementById('modal').classList.add('op');}
-function cmo(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('op');}
-
-// ══════════════════════════════════════════════════════════
-// REPORT
-// ══════════════════════════════════════════════════════════
+// ── REPORT ──
 function openReport(){
   const now=new Date();
-  const yr=document.getElementById('rpt-year');const mo=document.getElementById('rpt-month');
-  yr.innerHTML='';for(let y=now.getFullYear()-1;y<=now.getFullYear();y++){const o=document.createElement('option');o.value=y;o.textContent=y+' он';if(y===now.getFullYear())o.selected=true;yr.appendChild(o);}
-  mo.innerHTML='';MN_MONTHS.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m;if(i===now.getMonth())o.selected=true;mo.appendChild(o);});
-  document.getElementById('modal-rpt').classList.add('op');
+  const yrSel=document.getElementById('rpt-year');
+  const moSel=document.getElementById('rpt-month');
+  yrSel.innerHTML='';
+  for(let y=now.getFullYear()-1;y<=now.getFullYear();y++){
+    const o=document.createElement('option');o.value=y;o.textContent=y+' он';
+    if(y===now.getFullYear())o.selected=true;
+    yrSel.appendChild(o);
+  }
+  moSel.innerHTML='';
+  MN_MONTHS.forEach((m,i)=>{
+    const o=document.createElement('option');o.value=i;o.textContent=m;
+    if(i===now.getMonth())o.selected=true;
+    moSel.appendChild(o);
+  });
+  document.getElementById('modal-rpt').classList.add('open');
   renderReport();
 }
-function closeRpt(){document.getElementById('modal-rpt').classList.remove('op');}
+function closeRpt(){document.getElementById('modal-rpt').classList.remove('open');}
 
 async function renderReport(){
   const yr=parseInt(document.getElementById('rpt-year').value);
   const mo=parseInt(document.getElementById('rpt-month').value);
-  document.getElementById('rpt-title').textContent=yr+' оны '+MN_MONTHS[mo]+' — ХАБЭА сарын тайлан';
-  document.getElementById('rpt-body').innerHTML='<div style="padding:20px;color:var(--tx2);text-align:center"><i class="ti ti-loader" style="font-size:20px"></i> Уншиж байна…</div>';
-  let rows=[];
-  if(cfg.url){try{const res=await sheetsGet({action:'loadMonth',year:yr,month:mo+1});if(res.rows)rows=res.rows;}catch(e){}}
-  if(!rows.length){
-    const dim=new Date(yr,mo+1,0).getDate();
-    for(let d=1;d<=dim;d++){const k=dateKey(new Date(yr,mo,d));const e=localLog[k];if(e)rows.push({dateKey:k,tasag:e.tasag||'—',worker:e.worker||'—',state:e.state||[]});}
-  }
-  let totalDone=0,totalVio=0,totalOpen=0,totalFixed=0,totalItems=0;
-  const tasagStats={};const detailRows=[];
-  rows.forEach(r=>{
-    const st=r.state||[];const done=st.filter(s=>s.done).length;const vios=st.filter(s=>s.vio).length;
-    const fixed=st.filter(s=>s.vio&&s.fixed).length;const open=vios-fixed;
-    totalDone+=done;totalVio+=vios;totalFixed+=fixed;totalOpen+=open;totalItems+=ITEMS.length;
-    const tg=r.tasag||'—';
-    if(!tasagStats[tg])tasagStats[tg]={days:0,done:0,vio:0,open:0};
-    tasagStats[tg].days++;tasagStats[tg].done+=done;tasagStats[tg].vio+=vios;tasagStats[tg].open+=open;
-    detailRows.push({dt:new Date(r.dateKey),tasag:tg,worker:r.worker||'—',done,vio:vios,fixed,open,state:st});
-  });
-  const workerStats=calcWorkerStats(rows);
-  const warnedW=Object.entries(workerStats).filter(([w,s])=>s.total>=WARN_THRESHOLD).sort((a,b)=>b[1].total-a[1].total);
-  const pct=totalItems?Math.round(totalDone/totalItems*100):0;
+  document.getElementById('rpt-modal-title').textContent=yr+' оны '+MN_MONTHS[mo]+' — ХАБЭА сарын тайлан';
+  document.getElementById('rpt-body').innerHTML='<p style="color:var(--mut);padding:20px 0">Уншиж байна…</p>';
 
-  let html=`<div class="rpt-head"><div class="rpt-title">ХАБЭА-н өдөр дутмын хяналтын сарын тайлан</div>
-  <div class="rpt-meta">${yr} оны ${MN_MONTHS[mo]} · ${rows.length} өдрийн бүртгэл${cfg.url?' · Google Sheets-с':' · Нутгийн хадгалалтаас'}</div></div>
-  <div class="rpt-sum">
-    <div class="rpt-stat"><div class="rpt-stat-n">${rows.length}</div><div class="rpt-stat-l">Өдөр</div></div>
-    <div class="rpt-stat"><div class="rpt-stat-n grn">${totalDone}</div><div class="rpt-stat-l">Хийгдсэн</div></div>
-    <div class="rpt-stat"><div class="rpt-stat-n red">${totalVio}</div><div class="rpt-stat-l">Зөрчил</div></div>
-    <div class="rpt-stat"><div class="rpt-stat-n ${totalOpen>0?'red':'grn'}">${totalOpen}</div><div class="rpt-stat-l">Арилаагүй</div></div>
-    <div class="rpt-stat"><div class="rpt-stat-n amb">${pct}%</div><div class="rpt-stat-l">Гүйцэтгэл</div></div>
+  let rows=[];
+  // try sheets first
+  if(cfg.url){
+    try{
+      const res=await sheetsGet({action:'loadMonth',year:yr,month:mo+1});
+      if(res.rows)rows=res.rows;
+    }catch(e){}
+  }
+  // fallback to local
+  if(!rows.length){
+    const daysInMonth=new Date(yr,mo+1,0).getDate();
+    for(let d=1;d<=daysInMonth;d++){
+      const k=dateKey(new Date(yr,mo,d));
+      const e=localLog[k];
+      if(e)rows.push({dateKey:k,tasag:e.tasag||'—',worker:e.worker||'—',state:e.state||[]});
+    }
+  }
+
+  let totalDone=0,totalVio=0,totalItems=0;
+  const tasagStats={};
+  const detailRows=[];
+  rows.forEach(r=>{
+    const st=r.state||[];
+    const done=st.filter(s=>s.done).length;
+    const vios=st.filter(s=>s.vio).length;
+    totalDone+=done; totalVio+=vios; totalItems+=ITEMS.length;
+    const tg=r.tasag||'—';
+    if(!tasagStats[tg])tasagStats[tg]={days:0,done:0,vio:0};
+    tasagStats[tg].days++; tasagStats[tg].done+=done; tasagStats[tg].vio+=vios;
+    const dt=new Date(r.dateKey);
+    detailRows.push({dt,tasag:tg,worker:r.worker||'—',done,vio:vios,state:st});
+  });
+
+  const pct=totalItems?Math.round(totalDone/totalItems*100):0;
+  let html=`<div class="rpt-head">
+    <div class="rpt-title">ХАБЭА-н өдөр дутмын хяналтын сарын тайлан</div>
+    <div class="rpt-meta">${yr} оны ${MN_MONTHS[mo]} · Нийт ${rows.length} өдрийн бүртгэл${cfg.url?' · Google Sheets-с':' · Нутгийн хадгалалтаас'}</div>
+  </div>
+  <div class="rpt-summary-grid">
+    <div class="rpt-stat"><div class="rpt-stat-n">${rows.length}</div><div class="rpt-stat-l">Бүртгэлтэй өдөр</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n grn">${totalDone}</div><div class="rpt-stat-l">Нийт хийгдсэн</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n red">${totalVio}</div><div class="rpt-stat-l">Нийт зөрчил</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n amb">${pct}%</div><div class="rpt-stat-l">Гүйцэтгэлийн %</div></div>
   </div>`;
 
-  if(warnedW.length){
-    html+=`<div class="rpt-sec"><div class="rpt-sec-t ${warnedW.some(([w,s])=>s.total>=DANGER_THRESHOLD)?'danger':'warn'}"><i class="ti ti-alert-triangle" style="font-size:11px;vertical-align:-1px;margin-right:4px"></i>Анхааруулга — давтан зөрчилтэй ажилтан</div>`;
-    warnedW.forEach(([w,s])=>{const isDanger=s.total>=DANGER_THRESHOLD;
-      html+=`<div class="wcard ${isDanger?'danger':'warn'}"><span style="font-size:20px">${isDanger?'🚨':'⚠️'}</span><div>
-      <div class="wcard-nm"><i class="ti ti-user" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>${w}</div>
-      <div class="wcard-dt">Нийт <b>${s.total} зөрчил</b> · Арилсан: ${s.fixed} · Арилаагүй: <b>${s.open}</b>${isDanger?' · <b>Арга хэмжээ авах шаардлагатай!</b>':''}</div>
-      <div style="margin-top:4px;font-size:10px">${s.items.map(it=>`${it.date}: ${it.vio.substring(0,25)} ${it.fixed?'✓':'⏳'}`).join(' &nbsp; ')}</div>
-      </div></div>`;});
-    html+='</div>';
-  }
+  if(!detailRows.length){html+='<p style="color:var(--mut);font-size:13px">Энэ сард бүртгэл байхгүй байна.</p>';document.getElementById('rpt-body').innerHTML=html;return;}
 
-  if(!detailRows.length){html+='<p style="color:var(--tx2);font-size:12px;padding:12px 0">Энэ сард бүртгэл байхгүй байна.</p>';document.getElementById('rpt-body').innerHTML=html;return;}
-
-  html+=`<div class="rpt-sec"><div class="rpt-sec-t"><i class="ti ti-calendar" style="font-size:11px;vertical-align:-1px;margin-right:4px"></i>Өдөр бүрийн дэлгэрэнгүй</div>
-  <table class="rtbl"><thead><tr><th>Огноо</th><th>Гараг</th><th>Тасаг</th><th>Ажилтан</th><th>Хийгдсэн</th><th>Зөрчил</th><th>Арилсан</th><th>%</th></tr></thead><tbody>`;
-  detailRows.forEach(r=>{const p2=Math.round(r.done/ITEMS.length*100);
+  html+=`<div class="rpt-section"><div class="rpt-section-title">Өдөр бүрийн дэлгэрэнгүй</div>
+  <table class="rpt-table"><thead><tr><th>Огноо</th><th>Гараг</th><th>Тасаг</th><th>Ажилтан</th><th>Хийгдсэн</th><th>Зөрчил</th><th>%</th></tr></thead><tbody>`;
+  detailRows.forEach(r=>{
+    const pct2=Math.round(r.done/ITEMS.length*100);
     html+=`<tr><td>${r.dt.toLocaleDateString('mn-MN',{year:'numeric',month:'2-digit',day:'2-digit'})}</td>
     <td>${MN_WDAYS[r.dt.getDay()]}</td><td>${r.tasag}</td><td>${r.worker}</td>
-    <td><span class="bdg ok">${r.done}/${ITEMS.length}</span></td>
-    <td>${r.vio>0?`<span class="bdg vio">${r.vio}</span>`:'<span class="bdg ok">0</span>'}</td>
-    <td>${r.vio>0?(r.open>0?`<span class="bdg warn">${r.fixed}/${r.vio}</span>`:`<span class="bdg fix">${r.fixed}/${r.vio} ✓</span>`):'—'}</td>
-    <td>${p2}%</td></tr>`;});
+    <td><span class="badge ok">${r.done}/${ITEMS.length}</span></td>
+    <td>${r.vio>0?`<span class="badge vio">${r.vio}</span>`:'<span class="badge ok">0</span>'}</td>
+    <td>${pct2}%</td></tr>`;
+  });
   html+='</tbody></table></div>';
 
   const allVios=[];
-  detailRows.forEach(r=>{(r.state||[]).forEach((s,i)=>{if(s.vio)allVios.push({dt:r.dt,tasag:r.tasag,item:i+1,text:s.vio,worker:s.vioWorker||'',fixed:s.fixed||false,fixNote:s.fixNote||''});});});
+  detailRows.forEach(r=>{(r.state||[]).forEach((s,i)=>{if(s.vio)allVios.push({dt:r.dt,tasag:r.tasag,item:i+1,text:s.vio});});});
   if(allVios.length){
-    const openVios=allVios.filter(v=>!v.fixed).length;
-    html+=`<div class="rpt-sec"><div class="rpt-sec-t ${openVios>0?'danger':''}"><i class="ti ti-alert-triangle" style="font-size:11px;vertical-align:-1px;margin-right:4px"></i>Зөрчлийн дэлгэрэнгүй (${allVios.length} · ${openVios} арилаагүй)</div>
-    <table class="rtbl"><thead><tr><th>Огноо</th><th>Тасаг</th><th>№</th><th>Зүйл</th><th>Тайлбар</th><th>Ажилтан</th><th>Арилсан</th><th>Тэмдэглэл</th></tr></thead><tbody>`;
-    allVios.forEach(v=>{html+=`<tr class="${!v.fixed?'dr':''}">
-      <td>${v.dt.toLocaleDateString('mn-MN',{year:'numeric',month:'2-digit',day:'2-digit'})}</td>
-      <td>${v.tasag}</td><td>${v.item}</td>
-      <td style="font-size:10px">${ITEMS[v.item-1]}</td>
-      <td><span class="bdg vio">${v.text}</span></td>
-      <td>${v.worker?`<i class="ti ti-user" style="font-size:10px;vertical-align:-1px"></i> ${v.worker}`:'—'}</td>
-      <td>${v.fixed?'<span class="bdg fix">✅</span>':'<span class="bdg dng">⏳</span>'}</td>
-      <td style="font-size:10px">${v.fixNote||'—'}</td></tr>`;});
+    html+=`<div class="rpt-section"><div class="rpt-section-title">Зөрчлийн дэлгэрэнгүй (${allVios.length})</div>
+    <table class="rpt-table"><thead><tr><th>Огноо</th><th>Тасаг</th><th>№</th><th>Зүйл</th><th>Тайлбар</th></tr></thead><tbody>`;
+    allVios.forEach(v=>{html+=`<tr><td>${v.dt.toLocaleDateString('mn-MN',{year:'numeric',month:'2-digit',day:'2-digit'})}</td>
+    <td>${v.tasag}</td><td>${v.item}</td><td style="font-size:11px">${ITEMS[v.item-1]}</td>
+    <td><span class="badge vio">${v.text}</span></td></tr>`;});
     html+='</tbody></table></div>';
   }
 
   if(Object.keys(tasagStats).length>1){
-    html+=`<div class="rpt-sec"><div class="rpt-sec-t"><i class="ti ti-building" style="font-size:11px;vertical-align:-1px;margin-right:4px"></i>Тасгаар харьцуулалт</div>
-    <table class="rtbl"><thead><tr><th>Тасаг</th><th>Өдөр</th><th>Хийгдсэн</th><th>Зөрчил</th><th>Арилаагүй</th><th>%</th></tr></thead><tbody>`;
-    Object.entries(tasagStats).forEach(([tg,s])=>{const avg=Math.round(s.done/(s.days*ITEMS.length)*100);
-      html+=`<tr><td>${tg}</td><td>${s.days}</td><td><span class="bdg ok">${s.done}</span></td>
-      <td>${s.vio>0?`<span class="bdg vio">${s.vio}</span>`:'<span class="bdg ok">0</span>'}</td>
-      <td>${s.open>0?`<span class="bdg dng">${s.open}</span>`:'<span class="bdg ok">0</span>'}</td>
-      <td>${avg}%</td></tr>`;});
+    html+=`<div class="rpt-section"><div class="rpt-section-title">Тасгаар харьцуулалт</div>
+    <table class="rpt-table"><thead><tr><th>Тасаг</th><th>Өдөр</th><th>Хийгдсэн</th><th>Зөрчил</th><th>Дундаж %</th></tr></thead><tbody>`;
+    Object.entries(tasagStats).forEach(([tg,s])=>{
+      const avg=Math.round(s.done/(s.days*ITEMS.length)*100);
+      html+=`<tr><td>${tg}</td><td>${s.days}</td><td><span class="badge ok">${s.done}</span></td>
+      <td>${s.vio>0?`<span class="badge vio">${s.vio}</span>`:'<span class="badge ok">0</span>'}</td><td>${avg}%</td></tr>`;
+    });
     html+='</tbody></table></div>';
   }
 
-  html+=`<div style="margin-top:16px;padding-top:10px;border-top:1px solid var(--bdr);font-size:10px;color:var(--tx3)">
-    Тайлан үүсгэсэн: ${new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'})}
+  html+=`<div style="margin-top:20px;padding-top:12px;border-top:0.5px solid var(--bdr);font-size:11px;color:var(--mut)">
+    Тайлан үүсгэсэн: ${new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}
     &nbsp;·&nbsp; 2020 оны 02-р сарын 23-ны А/15 тоот хөдөлмөр аюулгүй ажиллагааны дотоод журмын хавсралт № 2
   </div>`;
   document.getElementById('rpt-body').innerHTML=html;
@@ -1166,126 +952,145 @@ function dlReport(){
   const yr=parseInt(document.getElementById('rpt-year').value);
   const mo=parseInt(document.getElementById('rpt-month').value);
   const content=document.getElementById('rpt-body').innerHTML;
-  const full=`<!DOCTYPE html><html lang="mn"><head><meta charset="UTF-8"/><title>ХАБЭА тайлан ${yr}-${mo+1}</title>
-  <style>body{font-family:'Segoe UI',sans-serif;padding:24px;color:#1A2332;font-size:12px}
-  .rpt-head{margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #0B1C36}
-  .rpt-title{font-size:16px;font-weight:700;color:#0B1C36;margin-bottom:4px}
-  .rpt-meta{font-size:11px;color:#5A6A7E}
-  .rpt-sum{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
-  .rpt-stat{background:#F0F3F8;border:1px solid #DDE3ED;border-radius:8px;padding:9px 11px}
-  .rpt-stat-n{font-size:18px;font-weight:700;color:#1B56C8}
-  .rpt-stat-n.grn{color:#047A52}.rpt-stat-n.red{color:#C92020}.rpt-stat-n.amb{color:#B86200}
-  .rpt-stat-l{font-size:10px;color:#5A6A7E;margin-top:2px}
-  .rpt-sec{margin-bottom:16px}
-  .rpt-sec-t{font-size:10.5px;font-weight:700;color:#5A6A7E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid #DDE3ED}
-  .rpt-sec-t.danger{color:#8B1515}.rpt-sec-t.warn{color:#8A4900}
+  const full=`<!DOCTYPE html><html lang="mn"><head><meta charset="UTF-8"/>
+  <title>ХАБЭА тайлан ${yr}-${mo+1}</title>
+  <style>body{font-family:'Segoe UI',sans-serif;padding:24px;color:#1a2040;font-size:12px}
+  .rpt-head{margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #0C447C}
+  .rpt-title{font-size:16px;font-weight:700;color:#0C447C;margin-bottom:4px}
+  .rpt-meta{font-size:12px;color:#5a6b8f}
+  .rpt-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .rpt-stat{background:#f4f7fc;border:1px solid #dde3ee;border-radius:8px;padding:10px 12px}
+  .rpt-stat-n{font-size:20px;font-weight:700;color:#185FA5}
+  .rpt-stat-n.grn{color:#1D9E75}.rpt-stat-n.red{color:#E24B4A}.rpt-stat-n.amb{color:#BA7517}
+  .rpt-stat-l{font-size:11px;color:#5a6b8f;margin-top:2px}
+  .rpt-section{margin-bottom:18px}
+  .rpt-section-title{font-size:11px;font-weight:700;color:#5a6b8f;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #dde3ee}
   table{width:100%;border-collapse:collapse;font-size:11px}
-  th{background:#EEF2FF;color:#0B1C36;padding:5px 8px;text-align:left;border:1px solid #C8D0DE;font-weight:700}
-  td{padding:5px 8px;border:1px solid #DDE3ED;vertical-align:top}
-  tr:nth-child(even) td{background:#F0F3F8}
-  tr.dr td{background:#FEE8E8}
-  .bdg{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
-  .bdg.ok{background:#E6F7F1;color:#035A3C}.bdg.vio{background:#FEE8E8;color:#8B1515}
-  .bdg.fix{background:#E6F7F1;color:#035A3C}.bdg.warn{background:#FEF3E2;color:#8A4900}
-  .bdg.dng{background:#FEE8E8;color:#8B1515;font-weight:700}
-  .wcard{border-radius:8px;padding:10px 13px;margin-bottom:8px;display:flex;gap:9px}
-  .wcard.warn{background:#FEF3E2;border:1px solid #FDE68A}
-  .wcard.danger{background:#FEE8E8;border:1px solid #F09595}
-  .wcard-nm{font-size:13px;font-weight:700}
-  .wcard.warn .wcard-nm{color:#8A4900}.wcard.danger .wcard-nm{color:#8B1515}
-  .wcard-dt{font-size:11px;margin-top:3px;line-height:1.5}
+  th{background:#f0f5ff;color:#0C447C;padding:6px 8px;text-align:left;border:1px solid #c0cfe8;font-weight:600}
+  td{padding:5px 8px;border:1px solid #dde3ee;vertical-align:top}
+  tr:nth-child(even) td{background:#f4f7fc}
+  .badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+  .badge.ok{background:#e1f5ee;color:#0f6e56}.badge.vio{background:#FCEBEB;color:#A32D2D}
   @media print{body{padding:10px}}</style></head><body>${content}</body></html>`;
   const blob=new Blob([full],{type:'text/html;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='ХАБЭА_тайлан_'+yr+'_'+(mo+1)+'.html';a.click();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ХАБЭА_тайлан_'+yr+'_'+(mo+1)+'.html';
+  a.click();
 }
 
-// ══════════════════════════════════════════════════════════
-// MOBILE DRAWER
-// ══════════════════════════════════════════════════════════
-function openDrw(){
-  const panel=document.getElementById('mob-panel');
-  const ov=document.getElementById('mob-overlay');
-  if(panel)panel.classList.add('open');
-  if(ov)ov.classList.add('open');
-  // sync worker value
-  const sw=document.getElementById('sb-worker');const dw=document.getElementById('drw-worker');
-  if(sw&&dw)dw.value=sw.value;
+
+// ── MOBILE PANEL ──
+function openMobPanel(){
+  const w=document.getElementById('inp-worker');
+  const mw=document.getElementById('mob-worker');
+  if(w&&mw)mw.value=w.value;
+  buildMobTasags();
+  renderMobNav();
+  document.getElementById('mob-panel').classList.add('open');
+  document.getElementById('mob-overlay').classList.add('open');
 }
-function closeDrw(){
-  const panel=document.getElementById('mob-panel');
-  const ov=document.getElementById('mob-overlay');
-  if(panel)panel.classList.remove('open');
-  if(ov)ov.classList.remove('open');
+function closeMobPanel(){
+  document.getElementById('mob-panel').classList.remove('open');
+  document.getElementById('mob-overlay').classList.remove('open');
 }
-function mobGoP(p){
-  closeDrw();
-  ['check','report','cfg','pin','out'].forEach(id=>{const el=document.getElementById('mni-'+id);if(el)el.classList.remove('active');});
-  const el=document.getElementById('mni-'+p);if(el)el.classList.add('active');
+function buildMobTasags(){
+  const mt=document.getElementById('mob-tasags');
+  if(!mt)return;
+  mt.innerHTML='';
+  TASAGS.forEach(t=>{
+    const b=document.createElement('button');
+    b.className='tg-btn';b.textContent=t;
+    b.classList.toggle('sel',t===tasag);
+    b.onclick=()=>{tasag=tasag===t?'':t;render();};
+    mt.appendChild(b);
+  });
+}
+function renderMobNav(){
+  const mn=document.getElementById('mob-nav');
+  if(!mn)return;
+  mn.innerHTML=state.map((s,i)=>`
+    <div style="display:flex;align-items:flex-start;gap:7px;padding:6px 12px;cursor:pointer;border-left:2px solid ${i===active?'#85B7EB':'transparent'};background:${i===active?'rgba(255,255,255,.12)':'transparent'}"
+      onclick="setActive(${i});closeMobPanel()">
+      <span style="font-size:10px;color:rgba(255,255,255,.35);min-width:15px;padding-top:2px">${i+1}</span>
+      <span style="font-size:11.5px;color:${s.done?'rgba(255,255,255,.38)':'rgba(255,255,255,.78)'};line-height:1.35;flex:1">${ITEMS[i].substring(0,38)}${ITEMS[i].length>38?'…':''}</span>
+      <span style="width:5px;height:5px;border-radius:50%;margin-top:5px;flex-shrink:0;background:${s.done?'#5DCAA5':s.vio?'#F09595':'transparent'}"></span>
+    </div>`).join('');
+}
+function updateMobUI(){
+  const mt=document.getElementById('mob-title');
+  if(mt)mt.textContent=(tasag?tasag+' — ':'')+fmtShort(curDate);
 }
 
-// ══════════════════════════════════════════════════════════
-// BOOT
-// ══════════════════════════════════════════════════════════
-function bootApp(){
-  if(!localStorage.getItem('habea_pin'))localStorage.setItem('habea_pin',_hash(DEFAULT_PIN));
-  if(cfg.url)setSyncBadge('ok','Sheets холбогдсон');
-  else setSyncBadge('','Тохиргоо хийнэ үү');
-  buildTasagBtns();
-  loadDay(new Date());
+// ── WARNING SYSTEM ──
+function closeWarn(){
+  document.getElementById('warn-modal').classList.remove('open');
+}
+function checkVioWarning(){
+  const worker = document.getElementById('inp-worker').value.trim();
+  const vioCount = state.filter(s=>s.vio).length;
+  if(vioCount === 3){
+    showWarn(worker, 3);
+  } else if(vioCount === 5){
+    showWarn(worker, 5);
+  }
+}
+function showWarn(worker, count){
+  const wm = document.getElementById('warn-msg');
+  const ww = document.getElementById('warn-worker');
+  if(count === 3){
+    wm.innerHTML = '<b>' + fmtShort(curDate) + '</b> өдрийн хяналтад<br><b style="color:#E24B4A">' + count + ' зөрчил</b> бүртгэгдлээ.<br>Ажилтанд анхааруулга өгнө үү!';
+  } else {
+    wm.innerHTML = '<b>' + fmtShort(curDate) + '</b> өдрийн хяналтад<br><b style="color:#E24B4A">' + count + ' зөрчил</b> бүртгэгдлээ.<br>Дарааллын <b>хоёр дахь</b> анхааруулга!';
+  }
+  if(worker){
+    ww.textContent = '👤 ' + worker;
+    ww.style.display = 'block';
+  } else {
+    ww.textContent = '👤 Ажилтны нэр бичээгүй байна!';
+    ww.style.display = 'block';
+  }
+  document.getElementById('warn-modal').classList.add('open');
 }
 
-// ── INIT ──
-(function(){
-  if(!localStorage.getItem('habea_pin'))localStorage.setItem('habea_pin',_hash(DEFAULT_PIN));
-  // Check session — if valid, skip landing and go straight to app
-  try{
-    const sess=JSON.parse(sessionStorage.getItem('habea_sess')||'null');
-    if(sess&&sess.at){
-      document.getElementById('landing').style.display='none';
-      document.getElementById('app').style.display='block';
-      bootApp();
-      return;
-    }
-  }catch(e){}
-  // Otherwise show landing
-  document.getElementById('app').style.display='none';
-})();
+// ── LOGIN ──
+const LOGIN_USER = 'ХАБЭА-н ажилтан';
+const LOGIN_PASS = '9761';
+const SESSION_KEY = 'habea_sess';
 
-// Override pi to also set session on success
-const _origPi=pi;
-function pi(v){
-  if(pinBuf.length>=4)return;
-  pinBuf+=v;upDots(pinBuf);
-  if(pinBuf.length===4){
+function checkSession(){
+  return sessionStorage.getItem(SESSION_KEY) === 'ok';
+}
+function doLogin(){
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-err');
+  if(u === LOGIN_USER && p === LOGIN_PASS){
+    sessionStorage.setItem(SESSION_KEY,'ok');
+    document.getElementById('login-screen').style.display='none';
+    err.textContent='';
+    loadDay(new Date());
+  } else {
+    err.textContent='Нэвтрэх нэр эсвэл нууц үг буруу байна.';
+    document.getElementById('login-pass').value='';
+    document.getElementById('login-pass').classList.add('err');
+    document.getElementById('login-user').classList.add('err');
     setTimeout(()=>{
-      if(_hash(pinBuf)===getPin()){
-        sessionStorage.setItem('habea_sess',JSON.stringify({at:Date.now()}));
-        document.getElementById('pin-screen').classList.remove('open');
-        document.getElementById('app').style.display='block';
-        pinBuf='';upDots('');
-        document.getElementById('perr').textContent='';
-        bootApp();
-      } else {
-        document.getElementById('perr').textContent='ПИН код буруу байна!';
-        for(let i=0;i<4;i++){const el=document.getElementById('pd'+i);if(el){el.classList.remove('on');el.classList.add('er');}}
-        const dots=document.getElementById('pdots');if(dots)dots.classList.add('shk');
-        setTimeout(()=>{pinBuf='';upDots('');document.getElementById('perr').textContent='';const d2=document.getElementById('pdots');if(d2)d2.classList.remove('shk');},650);
-      }
-    },80);
+      document.getElementById('login-pass').classList.remove('err');
+      document.getElementById('login-user').classList.remove('err');
+    }, 1500);
   }
 }
 
-// Override doLogout to clear session
-const _origLogout=doLogout;
-function doLogout(){
-  if(!confirm('Системээс гарах уу?'))return;
-  sessionStorage.removeItem('habea_sess');
-  document.getElementById('app').style.display='none';
-  document.getElementById('pin-screen').classList.remove('open');
-  document.getElementById('share-screen').classList.remove('open');
-  document.getElementById('landing').style.display='flex';
-  pinBuf='';upDots('');
+// ── init ──
+if(checkSession()){
+  document.getElementById('login-screen').style.display='none';
+  if(cfg.url) setSyncBadge('ok','Sheets холбогдсон');
+  else setSyncBadge('','Тохиргоо хийнэ үү');
+  loadDay(new Date());
+} else {
+  // show login, app hidden behind
+  setTimeout(()=>document.getElementById('login-user').focus(), 100);
 }
 </script>
 </body>
