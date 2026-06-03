@@ -335,7 +335,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <button class="mob-ham" onclick="openMobPanel()">☰</button>
   <span class="mob-title" id="mob-title">ХАБЭА хяналт</span>
   <button class="mob-top-ic" onclick="openReport()" title="Тайлан">📊</button>
-  <button class="mob-top-ic" onclick="openCfg()" title="Sheets">⚙</button>
+  <button class="mob-top-ic" onclick="openSheetsMain()" title="Sheets нээх" style="background:rgba(4,122,82,.3)">📋</button>
+  <button class="mob-top-ic" onclick="openCfg()" title="Sheets тохиргоо">⚙</button>
 </div>
 
 <div class="hdr">
@@ -348,6 +349,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <div class="hdr-sync" id="sync-badge"><span class="sync-dot"></span><span id="sync-txt">Тохиргоо хийнэ үү</span></div>
     <span class="hdr-date" id="hdr-date"></span>
     <button class="btn-cfg" onclick="openCfg()">⚙ Sheets тохиргоо</button>
+    <button class="btn-cfg" onclick="openSheetsMain()" title="Google Sheets нээх" style="background:rgba(4,122,82,.25);border-color:rgba(93,202,165,.3)">📋 Sheets</button>
     <button class="btn-report" onclick="openReport()">📊 Сарын тайлан</button>
   </div>
 </div>
@@ -437,7 +439,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       </div>
       <div class="cfg-row">
         <label>Apps Script Web App URL</label>
-        <input id="cfg-url" placeholder="https://script.google.com/macros/s/..." />
+        <div style="display:flex;gap:7px;align-items:center">
+          <input id="cfg-url" placeholder="https://script.google.com/macros/s/..." style="flex:1"/>
+          <button onclick="openSheetsUrl()" title="Google Sheets нээх"
+            style="flex-shrink:0;padding:7px 12px;background:var(--grn);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">
+            🔗 Sheets нээх
+          </button>
+        </div>
       </div>
       <div class="cfg-row">
         <label>Apps Script код (хуулж Apps Script-д буулгана)</label>
@@ -815,11 +823,28 @@ function openCfg(){
   document.getElementById('modal-cfg').classList.add('open');
 }
 function closeCfg(){document.getElementById('modal-cfg').classList.remove('open');}
+function openSheetsUrl(){
+  // Extract spreadsheet URL from Apps Script URL or open sheets.google.com
+  const url=document.getElementById('cfg-url').value.trim();
+  if(url && url.includes('script.google.com')){
+    // Try to derive spreadsheet — just open sheets home since we don't have spreadsheet ID
+    window.open('https://sheets.google.com','_blank');
+  } else if(cfg.sheetsUrl){
+    window.open(cfg.sheetsUrl,'_blank');
+  } else {
+    window.open('https://sheets.google.com','_blank');
+  }
+}
+function openSheetsMain(){
+  window.open('https://sheets.google.com','_blank');
+}
 function saveCfg(){
   cfg.url=document.getElementById('cfg-url').value.trim();
+  // Try to extract spreadsheet URL from script URL pattern
+  const su=document.getElementById('cfg-sheets-url');
+  if(su&&su.value.trim())cfg.sheetsUrl=su.value.trim();
   localStorage.setItem('habea_cfg',JSON.stringify(cfg));
   closeCfg();
-  setSyncBadge(cfg.url?'ok':'','');
   if(cfg.url){setSyncBadge('ok','Sheets холбогдсон');loadDay(curDate);}
   else setSyncBadge('','Тохиргоо хийнэ үү');
 }
