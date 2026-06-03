@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ХАБЭА — Өдөр дутмын хяналт</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#185FA5;--blue-l:#E6F1FB;--blue-m:#378ADD;--blue-d:#0C447C;
+  --grn:#1D9E75;--grn-l:#E1F5EE;--grn-d:#0F6E56;
+  --red:#E24B4A;--red-l:#FCEBEB;--red-d:#A32D2D;
+  --amb:#BA7517;--amb-l:#FAEEDA;--amb-d:#633806;
+  --ink:#1a2040;--mut:#5a6b8f;--bdr:#dde3ee;--bdr2:#c0cfe8;
+  --surf:#fff;--surf2:#f4f7fc;--bg:#eef2f9;
+  --rad:8px;--radl:12px;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+.hdr{background:var(--blue-d);padding:0 18px;height:50px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hdr-brand{display:flex;align-items:center;gap:9px}
+.hdr-ic{width:28px;height:28px;background:rgba(255,255,255,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.hdr-name{font-size:13px;font-weight:700;color:#fff;letter-spacing:0.03em}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,0.45);margin-left:6px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-date{font-size:12px;color:rgba(255,255,255,0.6)}
+.hdr-sync{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.5);padding:4px 10px;border:0.5px solid rgba(255,255,255,0.18);border-radius:6px}
+.hdr-sync.ok{color:#9FE1CB;border-color:rgba(159,225,203,0.3)}
+.hdr-sync.err{color:#F09595;border-color:rgba(240,149,149,0.3)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.btn-report,.btn-cfg{font-size:11px;padding:5px 12px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.22);border-radius:6px;color:#fff;cursor:pointer}
+.btn-report:hover,.btn-cfg:hover{background:rgba(255,255,255,0.18)}
+/* WARN banner */
+.warn-banner{background:#FAEEDA;border-bottom:1px solid #FAC775;padding:8px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.warn-icon{font-size:16px}
+.warn-text{font-size:12px;color:#412402;flex:1;line-height:1.4}
+.warn-close{font-size:14px;color:#854F0B;cursor:pointer;padding:2px 6px;border-radius:4px;background:rgba(0,0,0,0.06)}
+.warn-close:hover{background:rgba(0,0,0,0.1)}
+.wrap{display:flex;flex:1;overflow:hidden}
+.sidebar{width:212px;min-width:212px;background:var(--blue-d);display:flex;flex-direction:column;overflow:hidden}
+.sb-pad{padding:10px 10px 6px}
+.sb-inp{width:100%;font-size:12px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.18);border-radius:6px;padding:6px 9px;color:#fff;outline:none;margin-bottom:5px}
+.sb-inp::placeholder{color:rgba(255,255,255,0.35)}
+.sb-inp:focus{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4)}
+.sb-lbl-hdr{padding:8px 12px 4px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em}
+.tasag-btns{display:flex;flex-wrap:wrap;gap:4px;padding:0 10px 8px;border-bottom:0.5px solid rgba(255,255,255,0.1)}
+.tg-btn{font-size:11px;padding:4px 9px;border-radius:5px;border:0.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.12s}
+.tg-btn:hover{background:rgba(255,255,255,0.12)}
+.tg-btn.sel{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.4);color:#fff;font-weight:600}
+.sb-nav{flex:1;overflow-y:auto;padding:6px 0}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:2px}
+.sb-item{display:flex;align-items:flex-start;gap:7px;padding:6px 12px;cursor:pointer;border-left:2px solid transparent;transition:background 0.1s}
+.sb-item:hover{background:rgba(255,255,255,0.07)}
+.sb-item.active{background:rgba(255,255,255,0.12);border-left-color:#85B7EB}
+.sb-num{font-size:10px;color:rgba(255,255,255,0.35);min-width:15px;padding-top:2px}
+.sb-lbl{font-size:11.5px;color:rgba(255,255,255,0.75);line-height:1.35;flex:1}
+.sb-item.active .sb-lbl{color:#fff}
+.sb-item.is-done .sb-lbl{color:rgba(255,255,255,0.38)}
+.sb-dot{width:5px;height:5px;border-radius:50%;margin-top:5px;background:transparent;flex-shrink:0}
+.sb-item.is-done .sb-dot{background:#5DCAA5}
+.sb-item.is-vio .sb-dot{background:#F09595}
+.sb-footer{padding:10px 12px;border-top:0.5px solid rgba(255,255,255,0.1)}
+.prog-bar{height:4px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;border-radius:2px;background:#5DCAA5;transition:width 0.35s}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,0.4)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.top-bar{padding:11px 18px;background:var(--surf);border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tb-title{font-size:14px;font-weight:700;color:var(--ink)}
+.tb-sub{font-size:11px;color:var(--mut);margin-top:2px}
+.tb-right{display:flex;gap:8px;align-items:center}
+.stat{background:var(--surf2);border:0.5px solid var(--bdr);border-radius:6px;padding:4px 10px;text-align:center;min-width:44px}
+.stat-n{font-size:15px;font-weight:700;color:var(--blue)}
+.stat-n.red{color:var(--red)}.stat-n.grn{color:var(--grn)}
+.stat-l{font-size:10px;color:var(--mut)}
+.btn-day-save{font-size:11px;padding:5px 11px;background:var(--grn);color:#fff;border:none;border-radius:6px;cursor:pointer}
+.btn-day-save:hover{background:var(--grn-d)}
+.btn-day-save:disabled{opacity:0.5;cursor:default}
+.btn-sync{font-size:11px;padding:5px 10px;border:0.5px solid var(--blue-m);border-radius:6px;background:var(--blue-l);color:var(--blue);cursor:pointer;transition:all 0.15s}
+.btn-sync:hover{background:var(--blue-m);color:#fff}
+.btn-sync:disabled{opacity:0.5;cursor:default}
+.btn-reset{font-size:11px;padding:5px 10px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf);color:var(--mut);cursor:pointer}
+.btn-reset:hover{background:var(--surf2)}
+.date-nav{padding:8px 18px;background:var(--surf);border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.dn-btn{width:26px;height:26px;border:0.5px solid var(--bdr2);border-radius:5px;background:var(--surf2);color:var(--mut);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.dn-btn:hover{background:var(--bdr)}
+.dn-label{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+.dn-today{font-size:11px;padding:3px 9px;border:0.5px solid var(--blue-m);border-radius:5px;background:var(--blue-l);color:var(--blue);cursor:pointer}
+.content-area{flex:1;overflow-y:auto;padding:14px 18px}
+.content-area::-webkit-scrollbar{width:4px}
+.content-area::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+/* CARDS */
+.card{background:var(--surf);border:0.5px solid var(--bdr);border-radius:var(--radl);padding:13px 15px;margin-bottom:9px}
+.card.is-vio{border-left:2.5px solid var(--red);padding-left:12.5px}
+.card.is-vio.is-fixed{border-left-color:var(--grn)}
+.card.is-checked{background:#fafffe;border-color:#b8e8d8}
+.card-top{display:flex;align-items:flex-start;gap:10px}
+.ck-box{width:22px;height:22px;min-width:22px;border:1.5px solid var(--bdr2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:1px}
+.card.is-checked .ck-box{background:var(--grn);border-color:var(--grn)}
+.ck-num{font-size:11px;color:var(--mut);min-width:16px;padding-top:3px}
+.ck-txt{flex:1;font-size:13px;color:var(--ink);line-height:1.5}
+.card.is-checked .ck-txt{color:var(--mut)}
+.vio-btn{font-size:11px;padding:3px 9px;border:0.5px solid var(--red-d);border-radius:5px;color:var(--red-d);background:transparent;cursor:pointer;flex-shrink:0}
+.vio-btn:hover{background:var(--red-l)}
+/* VIO TAGS */
+.vio-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.vio-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;background:var(--red-l);color:var(--red-d);padding:3px 8px;border-radius:5px}
+.vio-tag.fixed{background:var(--grn-l);color:var(--grn-d)}
+.vio-tag.pending{background:var(--amb-l);color:var(--amb-d)}
+.vio-worker-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;background:#f0f5ff;color:var(--blue-d);padding:3px 8px;border-radius:5px;border:0.5px solid var(--bdr2)}
+/* VIO FORM */
+.vio-form{margin-top:9px;padding:12px;background:var(--surf2);border-radius:var(--rad);border:0.5px solid var(--bdr)}
+.vf-label{font-size:11px;font-weight:600;color:var(--mut);margin-bottom:4px;display:block}
+.vf-row{margin-bottom:9px}
+.vf-inp{width:100%;font-size:12px;padding:7px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);font-family:inherit;outline:none}
+.vf-inp:focus{border-color:var(--blue-m)}
+.vf-inp.ta{resize:none}
+.vf-fix-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surf);border:0.5px solid var(--bdr);border-radius:6px;margin-bottom:9px}
+.vf-fix-chk{width:17px;height:17px;cursor:pointer;accent-color:var(--grn)}
+.vf-fix-lbl{font-size:12px;color:var(--ink);cursor:pointer;flex:1}
+.vf-fix-note{display:none}
+.vf-fix-note.show{display:block}
+.vf-btns{display:flex;gap:6px}
+.btn-sm{font-size:11px;padding:4px 12px;border:0.5px solid var(--bdr2);border-radius:5px;background:var(--surf);color:var(--ink);cursor:pointer}
+.btn-sm:hover{background:var(--surf2)}
+.btn-sm.danger{border-color:#f7c1c1;color:var(--red-d)}
+.btn-sm.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+/* VLOG */
+.vlog-section{background:var(--surf);border-top:0.5px solid var(--bdr);padding:10px 18px;flex-shrink:0}
+.vl-hdr{display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.vl-title{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:0.06em}
+.vl-cnt{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:700}
+.vl-cnt.red{background:var(--red-l);color:var(--red-d)}
+.vl-cnt.amb{background:var(--amb-l);color:var(--amb-d)}
+.vlog-list{display:flex;flex-wrap:wrap;gap:7px}
+.vl-item{padding:7px 11px;border-radius:var(--rad);min-width:180px;max-width:320px;border:0.5px solid}
+.vl-item.open{background:var(--red-l);border-color:#f7c1c1}
+.vl-item.fixed{background:var(--grn-l);border-color:#9FE1CB}
+.vl-n{font-size:10px;font-weight:700;margin-bottom:2px}
+.vl-item.open .vl-n{color:var(--red-d)}
+.vl-item.fixed .vl-n{color:var(--grn-d)}
+.vl-worker{font-size:10px;color:var(--blue-d);background:#e6f1fb;display:inline-block;padding:1px 6px;border-radius:3px;margin-bottom:3px}
+.vl-t{font-size:11px;line-height:1.4}
+.vl-item.open .vl-t{color:#501313}
+.vl-item.fixed .vl-t{color:var(--grn-d)}
+.vl-fix-note{font-size:10px;color:var(--grn-d);margin-top:3px;font-style:italic}
+.empty-log{font-size:12px;color:var(--mut)}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,20,50,0.5);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surf);border-radius:var(--radl);width:900px;max-width:96vw;max-height:92vh;display:flex;flex-direction:column;border:0.5px solid var(--bdr2)}
+.modal-hdr{padding:13px 18px;border-bottom:0.5px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-hdr h3{font-size:14px;font-weight:700;color:var(--ink)}
+.modal-hdr-right{display:flex;gap:7px;align-items:center}
+.modal-close{width:28px;height:28px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--mut);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--bdr)}
+.modal-body{flex:1;overflow-y:auto;padding:18px}
+.modal-body::-webkit-scrollbar{width:4px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+.btn-print{font-size:12px;padding:6px 13px;background:var(--blue-d);color:#fff;border:none;border-radius:6px;cursor:pointer}
+.btn-dl{font-size:12px;padding:6px 13px;background:var(--grn);color:#fff;border:none;border-radius:6px;cursor:pointer}
+/* CFG MODAL */
+.cfg-modal{background:var(--surf);border-radius:var(--radl);width:520px;max-width:96vw;display:flex;flex-direction:column;border:0.5px solid var(--bdr2)}
+.cfg-body{padding:18px;display:flex;flex-direction:column;gap:14px}
+.cfg-row label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:5px}
+.cfg-row input,.cfg-row textarea{width:100%;font-size:12px;padding:8px 10px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--ink);outline:none;font-family:inherit}
+.cfg-row input:focus,.cfg-row textarea:focus{border-color:var(--blue-m);background:var(--surf)}
+.cfg-row textarea{resize:vertical;min-height:60px;font-size:11px}
+.cfg-hint{font-size:11px;color:var(--mut);line-height:1.5;background:var(--surf2);border:0.5px solid var(--bdr);border-radius:6px;padding:10px 12px}
+.cfg-hint code{background:#e6f1fb;color:var(--blue-d);padding:1px 5px;border-radius:3px;font-size:10px}
+.cfg-status{font-size:12px;padding:8px 12px;border-radius:6px;display:none}
+.cfg-status.ok{background:var(--grn-l);color:var(--grn-d);display:block}
+.cfg-status.err{background:var(--red-l);color:var(--red-d);display:block}
+.cfg-status.testing{background:var(--blue-l);color:var(--blue-d);display:block}
+.cfg-btns{display:flex;gap:8px;justify-content:flex-end}
+.btn-cfg-test{font-size:12px;padding:7px 14px;border:0.5px solid var(--blue-m);border-radius:6px;background:var(--blue-l);color:var(--blue);cursor:pointer}
+.btn-cfg-save{font-size:12px;padding:7px 14px;background:var(--blue-d);color:#fff;border:none;border-radius:6px;cursor:pointer}
+/* REPORT */
+.rpt-head{margin-bottom:16px;padding-bottom:12px;border-bottom:1.5px solid var(--blue-d)}
+.rpt-title{font-size:16px;font-weight:700;color:var(--blue-d);margin-bottom:4px}
+.rpt-meta{font-size:12px;color:var(--mut)}
+.rpt-section{margin-bottom:18px}
+.rpt-section-title{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;padding-bottom:4px;border-bottom:0.5px solid var(--bdr)}
+.rpt-section-title.warn{color:var(--amb-d);border-bottom-color:#FAC775}
+.rpt-section-title.danger{color:var(--red-d);border-bottom-color:#F09595}
+.rpt-table{width:100%;border-collapse:collapse;font-size:12px}
+.rpt-table th{background:#f0f5ff;color:var(--blue-d);padding:6px 9px;text-align:left;border:0.5px solid var(--bdr2);font-weight:600;font-size:11px}
+.rpt-table td{padding:6px 9px;border:0.5px solid var(--bdr);vertical-align:top}
+.rpt-table tr:nth-child(even) td{background:var(--surf2)}
+.rpt-table tr.warn-row td{background:#FAEEDA}
+.rpt-table tr.danger-row td{background:#FCEBEB}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600}
+.badge.ok{background:#e1f5ee;color:#0f6e56}
+.badge.vio{background:var(--red-l);color:var(--red-d)}
+.badge.fixed{background:var(--grn-l);color:var(--grn-d)}
+.badge.warn{background:var(--amb-l);color:var(--amb-d)}
+.badge.danger{background:var(--red-l);color:var(--red-d);font-weight:700}
+.rpt-summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.rpt-stat{background:var(--surf2);border:0.5px solid var(--bdr);border-radius:var(--rad);padding:10px 12px}
+.rpt-stat-n{font-size:20px;font-weight:700;color:var(--blue)}
+.rpt-stat-n.grn{color:var(--grn)}.rpt-stat-n.red{color:var(--red)}.rpt-stat-n.amb{color:var(--amb)}
+.rpt-stat-l{font-size:11px;color:var(--mut);margin-top:2px}
+.worker-warn-card{background:var(--amb-l);border:1px solid #FAC775;border-radius:var(--rad);padding:10px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.worker-warn-icon{font-size:18px;flex-shrink:0}
+.worker-warn-name{font-size:13px;font-weight:700;color:var(--amb-d)}
+.worker-warn-detail{font-size:12px;color:#412402;margin-top:3px}
+.worker-danger-card{background:var(--red-l);border:1px solid #F09595;border-radius:var(--rad);padding:10px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.worker-danger-name{font-size:13px;font-weight:700;color:var(--red-d)}
+.worker-danger-detail{font-size:12px;color:#501313;margin-top:3px}
+.month-sel-row{display:flex;gap:8px;align-items:center}
+.month-sel-row label{font-size:12px;color:var(--mut)}
+.month-sel-row select{font-size:12px;padding:5px 9px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--ink);outline:none;cursor:pointer}
+@media(max-width:700px){
+  .sidebar{width:160px;min-width:160px}.sb-lbl{font-size:11px}
+  .modal{width:98vw}.hdr-sub,.hdr-date{display:none}.stat{min-width:36px}
+}
+@media(max-width:700px){
+  .sidebar{width:160px;min-width:160px}.sb-lbl{font-size:11px}
+  .modal{width:98vw}.hdr-sub,.hdr-date{display:none}.stat{min-width:36px}
+}
+@media print{
+  .modal-hdr-right,.modal-close,button,.hdr,.sidebar,.date-nav,.top-bar,.vlog-section{display:none!important}
+  .modal{width:100%;max-width:100%;max-height:none;border:none}
+  .modal-body{overflow:visible;max-height:none}
+  .modal-bg{position:static;background:none;display:block}
+  body>*:not(.modal-bg){display:none}
+}
+/* ── LOGIN ── */
+.login-screen{position:fixed;inset:0;background:var(--blue-d);display:flex;align-items:center;justify-content:center;z-index:500}
+.login-screen.hidden{display:none}
+.login-box{background:#fff;border-radius:16px;padding:36px 40px;width:360px;max-width:92vw;text-align:center}
+.login-logo{width:52px;height:52px;background:var(--blue-d);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 16px}
+.login-title{font-size:18px;font-weight:700;color:var(--blue-d);margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--mut);margin-bottom:24px}
+.login-field{margin-bottom:14px;text-align:left}
+.login-field label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:5px}
+.login-inp{width:100%;font-size:14px;padding:10px 12px;border:1px solid var(--bdr2);border-radius:8px;background:var(--surf2);color:var(--ink);outline:none;font-family:inherit}
+.login-inp:focus{border-color:var(--blue-m);background:#fff}
+.login-btn{width:100%;font-size:14px;font-weight:600;padding:11px;background:var(--blue-d);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:4px;transition:background 0.15s}
+.login-btn:hover{background:var(--blue)}
+.login-err{font-size:12px;color:var(--red-d);background:var(--red-l);border:0.5px solid #F7C1C1;border-radius:6px;padding:8px 12px;margin-top:12px;display:none}
+.login-err.show{display:block}
+.login-user-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;background:rgba(255,255,255,0.12);border:0.5px solid rgba(255,255,255,0.22);border-radius:6px;padding:4px 10px;color:#fff}
+.login-user-badge span{color:rgba(255,255,255,0.7)}
+/* ── CHANGE PASSWORD MODAL ── */
+.chpw-modal{background:var(--surf);border-radius:var(--radl);width:400px;max-width:95vw;display:flex;flex-direction:column;border:0.5px solid var(--bdr2)}
+.chpw-body{padding:18px;display:flex;flex-direction:column;gap:12px}
+.chpw-field label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:4px}
+.chpw-inp{width:100%;font-size:13px;padding:8px 10px;border:0.5px solid var(--bdr2);border-radius:6px;background:var(--surf2);color:var(--ink);outline:none;font-family:inherit}
+.chpw-inp:focus{border-color:var(--blue-m);background:var(--surf)}
+.chpw-status{font-size:12px;padding:8px 12px;border-radius:6px;display:none}
+.chpw-status.ok{background:var(--grn-l);color:var(--grn-d);display:block}
+.chpw-status.err{background:var(--red-l);color:var(--red-d);display:block}
+.chpw-hint{font-size:11px;color:var(--mut);background:var(--surf2);border:0.5px solid var(--bdr);border-radius:6px;padding:8px 11px;line-height:1.5}
+.chpw-btns{display:flex;gap:8px;justify-content:flex-end}
+.btn-chpw-save{font-size:12px;padding:7px 16px;background:var(--blue-d);color:#fff;border:none;border-radius:6px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🛡</div>
+    <div class="login-title">ХАБЭА систем</div>
+    <div class="login-sub">Өдөр дутмын хяналтын систем</div>
+    <div class="login-field">
+      <label>Нууц дугаар</label>
+      <input class="login-inp" id="li-pass" type="password" placeholder="Нууц дугаар оруулна уу" autocomplete="current-password" inputmode="numeric" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Нэвтрэх</button>
+    <div class="login-err" id="li-err"></div>
+  </div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div class="modal-bg" id="modal-chpw" onclick="if(event.target===this)closeChpw()">
+  <div class="chpw-modal">
+    <div class="modal-hdr">
+      <h3>Нууц дугаар солих</h3>
+      <button class="modal-close" onclick="closeChpw()">✕</button>
+    </div>
+    <div class="chpw-body">
+      <div class="chpw-hint">
+        Нууц дугаар дор хаяж <b>4 оронтой</b> байх ёстой.
+      </div>
+      <div class="chpw-field">
+        <label>Одоогийн нууц дугаар</label>
+        <input class="chpw-inp" id="cpw-old" type="password" placeholder="Одоогийн нууц дугаар" inputmode="numeric"/>
+      </div>
+      <div class="chpw-field">
+        <label>Шинэ нууц дугаар</label>
+        <input class="chpw-inp" id="cpw-new1" type="password" placeholder="Шинэ нууц дугаар (4+ орон)" inputmode="numeric"/>
+      </div>
+      <div class="chpw-field">
+        <label>Шинэ нууц дугаар давтах</label>
+        <input class="chpw-inp" id="cpw-new2" type="password" placeholder="Дахин оруулна уу" inputmode="numeric" onkeydown="if(event.key==='Enter')doChangePw()"/>
+      </div>
+      <div class="chpw-status" id="cpw-status"></div>
+      <div class="chpw-btns">
+        <button class="btn-sm" onclick="closeChpw()">Болих</button>
+        <button class="btn-chpw-save" onclick="doChangePw()">Нууц дугаар солих</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-ic">🛡</div>
+    <span class="hdr-name">ХАБЭА</span>
+    <span class="hdr-sub">Өдөр дутмын хяналтын систем</span>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-sync" id="sync-badge"><span class="sync-dot"></span><span id="sync-txt">Тохиргоо хийнэ үү</span></div>
+    <span class="hdr-date" id="hdr-date"></span>
+    <button class="btn-cfg" onclick="openChpw()" title="Нууц дугаар солих">🔑 Нууц дугаар</button>
+    <button class="btn-cfg" onclick="doLogout()" title="Гарах">↩ Гарах</button>
+    <button class="btn-cfg" onclick="openCfg()">⚙ Sheets тохиргоо</button>
+    <button class="btn-report" onclick="openReport()">📊 Сарын тайлан</button>
+  </div>
+</div>
+
+<!-- Анхааруулгын banner -->
+<div id="warn-banner" class="warn-banner" style="display:none">
+  <span class="warn-icon">⚠️</span>
+  <span class="warn-text" id="warn-text"></span>
+  <span class="warn-close" onclick="document.getElementById('warn-banner').style.display='none'">✕</span>
+</div>
+
+<div class="wrap">
+  <div class="sidebar">
+    <div class="sb-pad">
+      <input class="sb-inp" id="inp-worker" placeholder="Хянасан ажилтан..."/>
+    </div>
+    <div class="sb-lbl-hdr">Тасаг сонгох</div>
+    <div class="tasag-btns" id="tasag-btns"></div>
+    <div class="sb-lbl-hdr">Хяналтын зүйлс</div>
+    <div class="sb-nav" id="sb-nav"></div>
+    <div class="sb-footer">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-row"><span id="prog-txt">0/12</span><span id="prog-pct">0%</span></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="top-bar">
+      <div>
+        <div class="tb-title" id="tb-title">Тасаг сонгоно уу</div>
+        <div class="tb-sub" id="tb-sub">ХАБЭА-н өдөр дутмын хяналтын хуудас</div>
+      </div>
+      <div class="tb-right">
+        <div class="stat"><div class="stat-n grn" id="st-done">0</div><div class="stat-l">Хийсэн</div></div>
+        <div class="stat"><div class="stat-n red" id="st-vio">0</div><div class="stat-l">Зөрчил</div></div>
+        <div class="stat"><div class="stat-n" id="st-left">12</div><div class="stat-l">Үлдсэн</div></div>
+        <button class="btn-day-save" id="btn-save" onclick="saveDay()">☁ Хадгалах</button>
+        <button class="btn-sync" id="btn-sync" onclick="manualSync()" title="Sheets-с дахин уншиж татах">🔄 Sync</button>
+        <button class="btn-reset" onclick="resetDay()">↺ Шинэ өдөр</button>
+      </div>
+    </div>
+    <div class="date-nav">
+      <button class="dn-btn" onclick="shiftDay(-1)">‹</button>
+      <span class="dn-label" id="dn-label"></span>
+      <button class="dn-today" onclick="goToday()">Өнөөдөр</button>
+      <button class="dn-btn" onclick="shiftDay(1)">›</button>
+    </div>
+    <div class="content-area" id="content-area"></div>
+    <div class="vlog-section">
+      <div class="vl-hdr">
+        <span class="vl-title">Өнөөдрийн зөрчлийн бүртгэл</span>
+        <span class="vl-cnt" id="vl-cnt" style="display:none"></span>
+      </div>
+      <div class="vlog-list" id="vlog-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="modal-bg" id="modal-rpt" onclick="if(event.target===this)closeRpt()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="rpt-modal-title">Сарын тайлан</h3>
+      <div class="modal-hdr-right">
+        <div class="month-sel-row">
+          <label>Сар:</label><select id="rpt-month" onchange="renderReport()"></select>
+          <label>Он:</label><select id="rpt-year" onchange="renderReport()"></select>
+        </div>
+        <button class="btn-dl" onclick="dlReport()">⬇ Татах</button>
+        <button class="btn-print" onclick="window.print()">🖨 Хэвлэх</button>
+        <button class="modal-close" onclick="closeRpt()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="rpt-body"></div>
+  </div>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="modal-bg" id="modal-cfg" onclick="if(event.target===this)closeCfg()">
+  <div class="cfg-modal">
+    <div class="modal-hdr">
+      <h3>Google Sheets тохиргоо</h3>
+      <button class="modal-close" onclick="closeCfg()">✕</button>
+    </div>
+    <div class="cfg-body">
+      <div class="cfg-hint">
+        <b>Алхам 1.</b> Google Sheets нээж <code>Extensions → Apps Script</code> руу орно<br>
+        <b>Алхам 2.</b> Доорх кодыг буулгаж <code>Deploy → New deployment → Web app</code> хийнэ<br>
+        <b>Алхам 3.</b> "Execute as: Me", "Who has access: Anyone" сонгоно<br>
+        <b>Алхам 4.</b> Гарсан <b>Web app URL</b>-ийг доор буулгана
+      </div>
+      <div class="cfg-row">
+        <label>Apps Script Web App URL</label>
+        <input id="cfg-url" placeholder="https://script.google.com/macros/s/..."/>
+      </div>
+      <div class="cfg-row">
+        <label>Apps Script код (хуулж Apps Script-д буулгана уу)</label>
+        <textarea id="cfg-script" rows="6" readonly onclick="this.select()" style="font-family:monospace;font-size:10.5px"></textarea>
+      </div>
+      <div class="cfg-status" id="cfg-status"></div>
+      <div class="cfg-btns">
+        <button class="btn-cfg-test" onclick="testConn()">🔗 Холболт шалгах</button>
+        <button class="btn-cfg-save" onclick="saveCfg()">Хадгалах</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ITEMS=[
+  "Зарлан мэдээлэх чанга яригчаар ХАБЭА-н зааварчилгаа өгөх",
+  "Өдөр дутмын зааварчилгаанд хяналт тавих",
+  "Тоног төхөөрөмжийн А/а-д хяналт хийж. Зөрчил арилгуулах",
+  "Галын аюулгүй байдалд хяналт тавьж. Зөрчлийг арилгуулах",
+  "Цахилгааны аюулгүй байдалд хяналт тавьж. Зөрчлийг арилгуулах",
+  "Ажлын байрны эрүүл ахуйд хяналт тавьж. Зөрчлийг арилгуулах",
+  "Хооллох үеийн ариун цэвэр. Эрүүл ахуйд хяналт тавьж зөвлөмж өгөх",
+  "Техник ашиглалтийн паспорт хөтлөлт хянах",
+  "Тоног төхөөрөмжийн цаг ашиглалтын бүртгэл хөтлөлт",
+  "Хог хаягдал. Байгал орчинд хяналт тавьж. Зөрчлийг арилгуулах",
+  "ХАБЭА-н илэрсэн зөрчил. Дутагдлыг арилгуулах",
+  "5s цэвэрлэгээний хяналт"
+];
+const TASAGS=["Оёдол","Гүйцэтгэх","Эсгүүр","Гоёл","Оффис","Агуулах"];
+const MN_MONTHS=["1-р сар","2-р сар","3-р сар","4-р сар","5-р сар","6-р сар","7-р сар","8-р сар","9-р сар","10-р сар","11-р сар","12-р сар"];
+const MN_WDAYS=["Ням","Дав","Мяг","Лха","Пүр","Баа","Бям"];
+// Анхааруулах босго: сард 3+ зөрчил = анхааруулга, 5+ = шаардлага
+const WARN_THRESHOLD=3, DANGER_THRESHOLD=5;
+
+const AS_CODE=`// ХАБЭА өдөр дутмын хяналт — Google Apps Script v2
+// Deploy → New deployment → Web app
+// Execute as: Me | Who has access: Anyone
+
+const SHEET_NAME = 'ХАБЭА_бүртгэл';
+
+function doGet(e) {
+  const action = e.parameter.action;
+  if (action === 'ping') return ok({status:'ok',time:new Date().toISOString()});
+  if (action === 'load') return loadData(e.parameter.dateKey);
+  if (action === 'loadMonth') return loadMonth(e.parameter.year, e.parameter.month);
+  return ok({error:'unknown action'});
+}
+
+function doPost(e) {
+  try {
+    const d = JSON.parse(e.postData.contents);
+    if (d.action === 'save') return saveData(d);
+    return ok({error:'unknown action'});
+  } catch(err) { return ok({error:err.message}); }
+}
+
+function getSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(['dateKey','tasag','worker','done','violations','fixStatus','savedAt','rawState']);
+    sh.setFrozenRows(1);
+    sh.getRange(1,1,1,8).setFontWeight('bold').setBackground('#0C447C').setFontColor('#fff');
+    [1,2,3,4,5,6,7,8].forEach((c,i)=>sh.setColumnWidth(c,[100,80,100,60,250,120,140,400][i]));
+  }
+  return sh;
+}
+
+function saveData(d) {
+  const sh = getSheet();
+  const data = sh.getDataRange().getValues();
+  const keyCol = 0;
+  let rowIdx = -1;
+  for (let i=1;i<data.length;i++) {
+    if (data[i][keyCol] === d.dateKey) { rowIdx = i+1; break; }
+  }
+  const vioDetails = d.state.filter(s=>s.vio).map((s,i)=>{
+    const idx = d.state.indexOf(s);
+    let txt = (idx+1)+'. '+s.vio;
+    if(s.vioWorker) txt += ' ['+s.vioWorker+']';
+    return txt;
+  }).join(' | ');
+  const fixStatus = d.state.filter(s=>s.vio).map((s,i)=>{
+    const idx = d.state.indexOf(s);
+    return s.fixed ? '✓ Арилсан' : '⏳ Арилаагүй';
+  }).join(' | ');
+  const done = d.state.filter(s=>s.done).length;
+  const row = [d.dateKey, d.tasag||'', d.worker||'', done+'/'+d.state.length, vioDetails, fixStatus, new Date().toLocaleString('mn-MN'), JSON.stringify(d.state)];
+  if (rowIdx > 0) {
+    sh.getRange(rowIdx,1,1,8).setValues([row]);
+  } else {
+    sh.appendRow(row);
+  }
+  return ok({status:'saved', dateKey:d.dateKey});
+}
+
+function loadData(dateKey) {
+  const sh = getSheet();
+  const data = sh.getDataRange().getValues();
+  for (let i=1;i<data.length;i++) {
+    if (data[i][0] === dateKey) {
+      try {
+        const state = JSON.parse(data[i][7]);
+        return ok({found:true, dateKey:dateKey, tasag:data[i][1], worker:data[i][2], state:state});
+      } catch(e) {}
+    }
+  }
+  return ok({found:false, dateKey:dateKey});
+}
+
+function loadMonth(year, month) {
+  const sh = getSheet();
+  const data = sh.getDataRange().getValues();
+  const mo = parseInt(month);
+  const prefix = year+'-'+(mo<10?'0':'')+mo;
+  const rows = [];
+  for (let i=1;i<data.length;i++) {
+    if (String(data[i][0]).startsWith(prefix)) {
+      try {
+        rows.push({dateKey:data[i][0],tasag:data[i][1],worker:data[i][2],done:data[i][3],violations:data[i][4],fixStatus:data[i][5],state:JSON.parse(data[i][7])});
+      } catch(e) { rows.push({dateKey:data[i][0],tasag:data[i][1],worker:data[i][2],done:data[i][3],violations:data[i][4],fixStatus:data[i][5]||'',state:[]}); }
+    }
+  }
+  return ok({rows:rows});
+}
+
+function ok(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}`;
+
+let cfg=JSON.parse(localStorage.getItem('habea_cfg')||'{}');
+let localLog=JSON.parse(localStorage.getItem('habea_log')||'{}');
+let tasag="",active=0;
+let curDate=new Date(); curDate.setHours(0,0,0,0);
+// state item: {done, vio, vioWorker, fixed, fixNote, form, draft, draftWorker, draftFixed, draftFixNote}
+let state=ITEMS.map(()=>({done:false,vio:"",vioWorker:"",fixed:false,fixNote:"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));
+
+function dateKey(d){return d.toISOString().slice(0,10)}
+function todayKey(){const t=new Date();t.setHours(0,0,0,0);return dateKey(t)}
+function fmtDate(d){return d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})}
+function fmtShort(d){return d.toLocaleDateString('mn-MN',{year:'numeric',month:'short',day:'numeric'})}
+
+function tickDate(){
+  const d=new Date();
+  document.getElementById('hdr-date').textContent=d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'})+' '+d.toLocaleTimeString('mn-MN',{hour:'2-digit',minute:'2-digit'});
+}
+tickDate(); setInterval(tickDate,10000);
+
+function setSyncBadge(s,t){
+  const b=document.getElementById('sync-badge');
+  b.className='hdr-sync '+(s||'');
+  document.getElementById('sync-txt').textContent=t;
+}
+
+// ── Worker warning system ──
+function calcWorkerStats(monthRows){
+  const stats={};
+  monthRows.forEach(r=>{
+    (r.state||[]).forEach(s=>{
+      if(s.vio && s.vioWorker){
+        const w=s.vioWorker.trim();
+        if(!stats[w])stats[w]={total:0,open:0,fixed:0,items:[]};
+        stats[w].total++;
+        if(s.fixed)stats[w].fixed++;
+        else stats[w].open++;
+        stats[w].items.push({date:r.dateKey,vio:s.vio,fixed:s.fixed,fixNote:s.fixNote||''});
+      }
+    });
+  });
+  return stats;
+}
+
+function checkCurrentDayWarning(){
+  // Check if current day has workers with repeat violations across recent days
+  const today=new Date(); today.setHours(0,0,0,0);
+  const rows=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(today); d.setDate(d.getDate()-i);
+    const k=dateKey(d);
+    const e=localLog[k];
+    if(e)rows.push({dateKey:k,state:e.state||[]});
+  }
+  const stats=calcWorkerStats(rows);
+  const warnings=[];
+  Object.entries(stats).forEach(([w,s])=>{
+    if(s.total>=DANGER_THRESHOLD) warnings.push({w,s,level:'danger'});
+    else if(s.total>=WARN_THRESHOLD) warnings.push({w,s,level:'warn'});
+  });
+  const banner=document.getElementById('warn-banner');
+  const txt=document.getElementById('warn-text');
+  if(warnings.length){
+    const msgs=warnings.map(({w,s,level})=>{
+      const icon=level==='danger'?'🚨':'⚠️';
+      return `${icon} <b>${w}</b> — сүүлийн 7 хоногт <b>${s.total} зөрчил</b> (${s.open} арилаагүй)`;
+    });
+    txt.innerHTML='Анхааруулга: '+msgs.join(' &nbsp;|&nbsp; ');
+    banner.style.display='flex';
+  } else {
+    banner.style.display='none';
+  }
+}
+
+// ── Sheets API ──
+async function sheetsGet(params){
+  const url=cfg.url; if(!url)throw new Error('URL тохируулаагүй');
+  const q=Object.entries(params).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
+  const r=await fetch(url+'?'+q); if(!r.ok)throw new Error('HTTP '+r.status);
+  return await r.json();
+}
+async function sheetsPost(body){
+  const url=cfg.url; if(!url)throw new Error('URL тохируулаагүй');
+  const r=await fetch(url,{method:'POST',body:JSON.stringify(body)});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return await r.json();
+}
+
+function stateToSave(){
+  return state.map(s=>({done:s.done,vio:s.vio,vioWorker:s.vioWorker||"",fixed:s.fixed||false,fixNote:s.fixNote||""}));
+}
+
+async function loadFromSheets(d){
+  const k=dateKey(d);
+  try{
+    setSyncBadge('syncing','Ачааллаж байна…');
+    const res=await sheetsGet({action:'load',dateKey:k});
+    if(res.found){
+      tasag=res.tasag||"";
+      document.getElementById('inp-worker').value=res.worker||"";
+      state=ITEMS.map((_,i)=>({
+        done:res.state[i]?.done||false,
+        vio:res.state[i]?.vio||"",
+        vioWorker:res.state[i]?.vioWorker||"",
+        fixed:res.state[i]?.fixed||false,
+        fixNote:res.state[i]?.fixNote||"",
+        form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""
+      }));
+      localLog[k]={tasag,worker:res.worker||"",state:stateToSave()};
+      localStorage.setItem('habea_log',JSON.stringify(localLog));
+      setSyncBadge('ok','Sheets-с уншлаа');
+    } else { setSyncBadge('ok','Sheets холбогдсон'); }
+  }catch(e){ setSyncBadge('err','Sheets алдаа'); loadFromLocal(d); }
+}
+
+function loadFromLocal(d){
+  const k=dateKey(d);
+  const saved=localLog[k];
+  if(saved){
+    tasag=saved.tasag||"";
+    document.getElementById('inp-worker').value=saved.worker||"";
+    state=ITEMS.map((_,i)=>({
+      done:saved.state[i]?.done||false,
+      vio:saved.state[i]?.vio||"",
+      vioWorker:saved.state[i]?.vioWorker||"",
+      fixed:saved.state[i]?.fixed||false,
+      fixNote:saved.state[i]?.fixNote||"",
+      form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""
+    }));
+  } else {
+    tasag=""; document.getElementById('inp-worker').value="";
+    state=ITEMS.map(()=>({done:false,vio:"",vioWorker:"",fixed:false,fixNote:"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));
+  }
+}
+
+async function saveDay(){
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true; btn.textContent='…';
+  const k=dateKey(curDate);
+  const worker=document.getElementById('inp-worker').value||"";
+  const saved=stateToSave();
+  const payload={action:'save',dateKey:k,tasag,worker,state:saved};
+  localLog[k]={tasag,worker,state:saved,savedAt:new Date().toISOString()};
+  localStorage.setItem('habea_log',JSON.stringify(localLog));
+  checkCurrentDayWarning();
+  if(cfg.url){
+    try{
+      setSyncBadge('syncing','Хадгалж байна…');
+      await sheetsPost(payload);
+      setSyncBadge('ok','Sheets-д хадгалагдлаа ✓');
+      btn.textContent='☁ Хадгалагдлаа';
+    }catch(e){ setSyncBadge('err','Sheets алдаа'); btn.textContent='💾 Нутагт'; }
+  } else { setSyncBadge('','Нутагт хадгаллаа'); btn.textContent='💾 Хадгаллаа'; }
+  setTimeout(()=>{btn.disabled=false;btn.textContent='☁ Хадгалах';},2500);
+}
+
+async function manualSync(){
+  const btn=document.getElementById('btn-sync');
+  if(!cfg.url){alert('Эхлээд ⚙ Sheets тохиргоо хийнэ үү.');return;}
+  btn.disabled=true; btn.textContent='⏳ Уншиж байна…';
+  try{
+    await loadFromSheets(curDate);
+    render();
+    checkCurrentDayWarning();
+    btn.textContent='✅ Sync дууслаа';
+  }catch(e){
+    btn.textContent='❌ Алдаа';
+  }
+  setTimeout(()=>{btn.disabled=false;btn.textContent='🔄 Sync';},2000);
+}
+
+function loadDay(d){
+  d=new Date(d); d.setHours(0,0,0,0); curDate=d; active=0;
+  tasag=""; document.getElementById('inp-worker').value="";
+  state=ITEMS.map(()=>({done:false,vio:"",vioWorker:"",fixed:false,fixNote:"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));
+  if(cfg.url){ loadFromSheets(d).then(()=>{render();checkCurrentDayWarning();}); }
+  else { loadFromLocal(d); checkCurrentDayWarning(); }
+  render();
+}
+function shiftDay(n){
+  const d=new Date(curDate); d.setDate(d.getDate()+n);
+  const today=new Date(); today.setHours(0,0,0,0);
+  if(d>today){alert('Ирээдүйн өдрийн бүртгэл хийх боломжгүй.');return;}
+  loadDay(d);
+}
+function goToday(){loadDay(new Date());}
+function resetDay(){
+  if(!confirm('Энэ өдрийн бүртгэлийг арилгах уу?'))return;
+  const k=dateKey(curDate);
+  delete localLog[k]; localStorage.setItem('habea_log',JSON.stringify(localLog));
+  tasag=""; document.getElementById('inp-worker').value="";
+  state=ITEMS.map(()=>({done:false,vio:"",vioWorker:"",fixed:false,fixNote:"",form:false,draft:"",draftWorker:"",draftFixed:false,draftFixNote:""}));
+  active=0; render();
+}
+
+// ── tasag buttons ──
+const tbEl=document.getElementById('tasag-btns');
+TASAGS.forEach(t=>{
+  const b=document.createElement('button');
+  b.className='tg-btn'; b.textContent=t;
+  b.onclick=()=>{tasag=tasag===t?"":t; render();};
+  tbEl.appendChild(b);
+});
+
+// ── render ──
+function render(){
+  document.querySelector('.date-nav .dn-label').textContent=fmtDate(curDate)+(dateKey(curDate)===todayKey()?' — Өнөөдөр':'');
+  document.querySelectorAll('.tg-btn').forEach(b=>b.classList.toggle('sel',b.textContent===tasag));
+  document.getElementById('tb-title').textContent=tasag||'Тасаг сонгоно уу';
+  document.getElementById('tb-sub').textContent=(tasag?'ХАБЭА '+tasag+' тасаг — ':'ХАБЭА — ')+fmtShort(curDate);
+
+  const done=state.filter(s=>s.done).length;
+  const vios=state.filter(s=>s.vio).length;
+  document.getElementById('st-done').textContent=done;
+  document.getElementById('st-vio').textContent=vios;
+  document.getElementById('st-left').textContent=ITEMS.length-done;
+  document.getElementById('prog-fill').style.width=Math.round(done/ITEMS.length*100)+'%';
+  document.getElementById('prog-txt').textContent=done+'/'+ITEMS.length;
+  document.getElementById('prog-pct').textContent=Math.round(done/ITEMS.length*100)+'%';
+
+  document.getElementById('sb-nav').innerHTML=state.map((s,i)=>`
+    <div class="sb-item${i===active?' active':''}${s.done?' is-done':''}${s.vio?' is-vio':''}" onclick="setActive(${i})">
+      <span class="sb-num">${i+1}</span>
+      <span class="sb-lbl">${ITEMS[i].substring(0,36)}${ITEMS[i].length>36?'…':''}</span>
+      <span class="sb-dot"></span>
+    </div>`).join('');
+
+  const ckSvg='<svg width="13" height="13" viewBox="0 0 13 13"><polyline points="2,7 5,10 11,3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  document.getElementById('content-area').innerHTML=state.map((s,i)=>`
+    <div class="card${s.done?' is-checked':''}${s.vio?' is-vio':''}${s.vio&&s.fixed?' is-fixed':''}" id="card-${i}">
+      <div class="card-top">
+        <span class="ck-num">${i+1}</span>
+        <div class="ck-box" onclick="toggle(${i})">${s.done?ckSvg:''}</div>
+        <span class="ck-txt">${ITEMS[i]}</span>
+        <button class="vio-btn" onclick="openForm(${i})">⚠ Зөрчил</button>
+      </div>
+      ${s.vio?`<div class="vio-tags">
+        <span class="vio-tag ${s.fixed?'fixed':'pending'}">
+          ${s.fixed?'✅ Арилсан':'🔴 Арилаагүй'}: ${s.vio}
+        </span>
+        ${s.vioWorker?`<span class="vio-worker-tag">👤 ${s.vioWorker}</span>`:''}
+      </div>`:''}
+      ${s.form?`<div class="vio-form">
+        <div class="vf-row">
+          <label class="vf-label">Зөрчлийн тайлбар</label>
+          <textarea id="vf-${i}" class="vf-inp ta" rows="2" placeholder="Зөрчлийн дэлгэрэнгүй тайлбар...">${s.draft}</textarea>
+        </div>
+        <div class="vf-row">
+          <label class="vf-label">Зөрчил гаргасан ажилтны нэр</label>
+          <input id="vfw-${i}" class="vf-inp" placeholder="Ажилтны нэр (заавал биш)..." value="${s.draftWorker}"/>
+        </div>
+        <div class="vf-fix-row">
+          <input type="checkbox" class="vf-fix-chk" id="vfc-${i}" ${s.draftFixed?'checked':''} onchange="toggleFixNote(${i})"/>
+          <label class="vf-fix-lbl" for="vfc-${i}">Зөрчил арилгасан</label>
+        </div>
+        <div class="vf-fix-note${s.draftFixed?' show':''}" id="vfn-wrap-${i}">
+          <div class="vf-row">
+            <label class="vf-label">Арилгасан талаарх тэмдэглэл</label>
+            <input id="vfn-${i}" class="vf-inp" placeholder="Хэн, хэзээ, яаж арилгасан..." value="${s.draftFixNote}"/>
+          </div>
+        </div>
+        <div class="vf-btns">
+          <button class="btn-sm primary" onclick="saveVio(${i})">Хадгалах</button>
+          <button class="btn-sm" onclick="closeForm(${i})">Болих</button>
+          ${s.vio?`<button class="btn-sm danger" onclick="clearVio(${i})">Зөрчил арилгах</button>`:''}
+        </div>
+      </div>`:''}
+    </div>`).join('');
+
+  const ac=document.getElementById('card-'+active);
+  if(ac)ac.scrollIntoView({block:'nearest',behavior:'smooth'});
+
+  // vlog
+  const vs=state.map((s,i)=>s.vio?{i:i+1,s}:null).filter(Boolean);
+  const vc=document.getElementById('vl-cnt');
+  const openVios=vs.filter(v=>!v.s.fixed).length;
+  vc.textContent=vs.length+(openVios>0?' ('+openVios+' арилаагүй)':'');
+  vc.style.display=vs.length?'':'none';
+  vc.className='vl-cnt '+(openVios>0?'red':'amb');
+  document.getElementById('vlog-list').innerHTML=vs.length
+    ?vs.map(({i,s})=>`
+      <div class="vl-item ${s.fixed?'fixed':'open'}">
+        <div class="vl-n">${i}. ${ITEMS[i-1].substring(0,35)}</div>
+        ${s.vioWorker?`<div class="vl-worker">👤 ${s.vioWorker}</div>`:''}
+        <div class="vl-t">${s.vio}</div>
+        ${s.fixed&&s.fixNote?`<div class="vl-fix-note">✅ ${s.fixNote}</div>`:''}
+        ${!s.fixed?`<div class="vl-fix-note" style="color:var(--red-d);font-style:normal">⏳ Арилаагүй байна</div>`:''}
+      </div>`).join('')
+    :'<div class="empty-log">Одоогоор зөрчил бүртгэгдээгүй байна</div>';
+
+  setTimeout(()=>{const t=document.getElementById('vf-'+active);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},40);
+}
+
+function setActive(i){active=i;render();}
+function toggle(i){state[i].done=!state[i].done;active=i;render();}
+function openForm(i){
+  state.forEach((s,j)=>{if(j!==i)s.form=false;});
+  state[i].form=!state[i].form;
+  state[i].draft=state[i].vio;
+  state[i].draftWorker=state[i].vioWorker||"";
+  state[i].draftFixed=state[i].fixed||false;
+  state[i].draftFixNote=state[i].fixNote||"";
+  active=i; render();
+}
+function closeForm(i){state[i].form=false;render();}
+function toggleFixNote(i){
+  const chk=document.getElementById('vfc-'+i);
+  const wrap=document.getElementById('vfn-wrap-'+i);
+  if(wrap) wrap.className='vf-fix-note'+(chk.checked?' show':'');
+  state[i].draftFixed=chk.checked;
+}
+function saveVio(i){
+  const t=document.getElementById('vf-'+i);
+  const w=document.getElementById('vfw-'+i);
+  const chk=document.getElementById('vfc-'+i);
+  const fn=document.getElementById('vfn-'+i);
+  if(t&&t.value.trim()){
+    state[i].vio=t.value.trim();
+    state[i].vioWorker=w?w.value.trim():"";
+    state[i].fixed=chk?chk.checked:false;
+    state[i].fixNote=fn?fn.value.trim():"";
+  }
+  state[i].form=false;
+  render();
+  // re-check warnings after saving vio
+  checkCurrentDayWarning();
+}
+function clearVio(i){
+  state[i].vio='';state[i].vioWorker='';state[i].fixed=false;state[i].fixNote='';
+  state[i].form=false; render();
+}
+
+// ── CONFIG ──
+function openCfg(){
+  document.getElementById('cfg-url').value=cfg.url||'';
+  document.getElementById('cfg-script').value=AS_CODE;
+  document.getElementById('cfg-status').style.display='none';
+  document.getElementById('modal-cfg').classList.add('open');
+}
+function closeCfg(){document.getElementById('modal-cfg').classList.remove('open');}
+function saveCfg(){
+  cfg.url=document.getElementById('cfg-url').value.trim();
+  localStorage.setItem('habea_cfg',JSON.stringify(cfg));
+  closeCfg();
+  if(cfg.url){setSyncBadge('ok','Sheets холбогдсон');loadDay(curDate);}
+  else setSyncBadge('','Тохиргоо хийнэ үү');
+}
+async function testConn(){
+  const url=document.getElementById('cfg-url').value.trim();
+  if(!url){showCfgStatus('err','URL оруулна уу');return;}
+  showCfgStatus('testing','Холболт шалгаж байна…');
+  try{
+    const r=await fetch(url+'?action=ping');
+    const j=await r.json();
+    if(j.status==='ok')showCfgStatus('ok','✅ Амжилттай холбогдлоо!');
+    else showCfgStatus('err','Хариу буруу: '+JSON.stringify(j));
+  }catch(e){showCfgStatus('err','Алдаа: '+e.message);}
+}
+function showCfgStatus(type,txt){
+  const el=document.getElementById('cfg-status');
+  el.className='cfg-status '+type; el.textContent=txt;
+}
+
+// ── REPORT ──
+function openReport(){
+  const now=new Date();
+  const yrSel=document.getElementById('rpt-year');
+  const moSel=document.getElementById('rpt-month');
+  yrSel.innerHTML='';
+  for(let y=now.getFullYear()-1;y<=now.getFullYear();y++){
+    const o=document.createElement('option');o.value=y;o.textContent=y+' он';
+    if(y===now.getFullYear())o.selected=true;
+    yrSel.appendChild(o);
+  }
+  moSel.innerHTML='';
+  MN_MONTHS.forEach((m,i)=>{
+    const o=document.createElement('option');o.value=i;o.textContent=m;
+    if(i===now.getMonth())o.selected=true;
+    moSel.appendChild(o);
+  });
+  document.getElementById('modal-rpt').classList.add('open');
+  renderReport();
+}
+function closeRpt(){document.getElementById('modal-rpt').classList.remove('open');}
+
+async function renderReport(){
+  const yr=parseInt(document.getElementById('rpt-year').value);
+  const mo=parseInt(document.getElementById('rpt-month').value);
+  document.getElementById('rpt-modal-title').textContent=yr+' оны '+MN_MONTHS[mo]+' — ХАБЭА сарын тайлан';
+  document.getElementById('rpt-body').innerHTML='<p style="color:var(--mut);padding:20px 0">Уншиж байна…</p>';
+
+  let rows=[];
+  if(cfg.url){
+    try{ const res=await sheetsGet({action:'loadMonth',year:yr,month:mo+1}); if(res.rows)rows=res.rows; }catch(e){}
+  }
+  if(!rows.length){
+    const dim=new Date(yr,mo+1,0).getDate();
+    for(let d=1;d<=dim;d++){
+      const k=dateKey(new Date(yr,mo,d));
+      const e=localLog[k];
+      if(e)rows.push({dateKey:k,tasag:e.tasag||'—',worker:e.worker||'—',state:e.state||[]});
+    }
+  }
+
+  let totalDone=0,totalVio=0,totalOpen=0,totalFixed=0,totalItems=0;
+  const tasagStats={};
+  const detailRows=[];
+  rows.forEach(r=>{
+    const st=r.state||[];
+    const done=st.filter(s=>s.done).length;
+    const vios=st.filter(s=>s.vio).length;
+    const fixed=st.filter(s=>s.vio&&s.fixed).length;
+    const open=vios-fixed;
+    totalDone+=done; totalVio+=vios; totalFixed+=fixed; totalOpen+=open; totalItems+=ITEMS.length;
+    const tg=r.tasag||'—';
+    if(!tasagStats[tg])tasagStats[tg]={days:0,done:0,vio:0,open:0};
+    tasagStats[tg].days++; tasagStats[tg].done+=done; tasagStats[tg].vio+=vios; tasagStats[tg].open+=open;
+    const dt=new Date(r.dateKey);
+    detailRows.push({dt,tasag:tg,worker:r.worker||'—',done,vio:vios,fixed,open,state:st});
+  });
+
+  // Worker stats
+  const workerStats=calcWorkerStats(rows);
+  const warnedWorkers=Object.entries(workerStats).filter(([w,s])=>s.total>=WARN_THRESHOLD).sort((a,b)=>b[1].total-a[1].total);
+
+  const pct=totalItems?Math.round(totalDone/totalItems*100):0;
+  let html=`<div class="rpt-head">
+    <div class="rpt-title">ХАБЭА-н өдөр дутмын хяналтын сарын тайлан</div>
+    <div class="rpt-meta">${yr} оны ${MN_MONTHS[mo]} · Нийт ${rows.length} өдрийн бүртгэл${cfg.url?' · Google Sheets-с':' · Нутгийн хадгалалтаас'}</div>
+  </div>
+  <div class="rpt-summary-grid">
+    <div class="rpt-stat"><div class="rpt-stat-n">${rows.length}</div><div class="rpt-stat-l">Бүртгэлтэй өдөр</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n grn">${totalDone}</div><div class="rpt-stat-l">Нийт хийгдсэн</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n red">${totalVio}</div><div class="rpt-stat-l">Нийт зөрчил</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n ${totalOpen>0?'red':'grn'}">${totalOpen}</div><div class="rpt-stat-l">Арилаагүй</div></div>
+    <div class="rpt-stat"><div class="rpt-stat-n amb">${pct}%</div><div class="rpt-stat-l">Гүйцэтгэлийн %</div></div>
+  </div>`;
+
+  // ── Анхааруулга: давтан зөрчилтэй ажилтан ──
+  if(warnedWorkers.length){
+    html+=`<div class="rpt-section"><div class="rpt-section-title ${warnedWorkers.some(([w,s])=>s.total>=DANGER_THRESHOLD)?'danger':'warn'}">
+      ⚠ Зөрчилтэй ажилтны анхааруулга
+    </div>`;
+    warnedWorkers.forEach(([w,s])=>{
+      const isDanger=s.total>=DANGER_THRESHOLD;
+      const cls=isDanger?'worker-danger-card':'worker-warn-card';
+      const ncls=isDanger?'worker-danger-name':'worker-warn-name';
+      const dcls=isDanger?'worker-danger-detail':'worker-warn-detail';
+      html+=`<div class="${cls}">
+        <span style="font-size:20px">${isDanger?'🚨':'⚠️'}</span>
+        <div>
+          <div class="${ncls}">👤 ${w}</div>
+          <div class="${dcls}">
+            Нийт <b>${s.total} зөрчил</b> илэрсэн
+            &nbsp;·&nbsp; Арилсан: <b>${s.fixed}</b>
+            &nbsp;·&nbsp; Арилаагүй: <b style="color:var(--red-d)">${s.open}</b>
+            ${isDanger?'&nbsp;·&nbsp; <b style="color:var(--red-d)">Цаашид арга хэмжээ авах шаардлагатай</b>':''}
+          </div>
+          <div style="margin-top:5px;font-size:11px;color:${isDanger?'#501313':'#412402'}">
+            ${s.items.map(it=>`<span style="margin-right:8px">${it.date}: ${it.vio.substring(0,30)} ${it.fixed?'<span style="color:var(--grn-d)">✓</span>':'<span style="color:var(--red-d)">⏳</span>'}</span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+
+  if(!detailRows.length){html+='<p style="color:var(--mut);font-size:13px">Энэ сард бүртгэл байхгүй байна.</p>';document.getElementById('rpt-body').innerHTML=html;return;}
+
+  // Day detail table
+  html+=`<div class="rpt-section"><div class="rpt-section-title">Өдөр бүрийн дэлгэрэнгүй</div>
+  <table class="rpt-table"><thead><tr><th>Огноо</th><th>Гараг</th><th>Тасаг</th><th>Ажилтан</th><th>Хийгдсэн</th><th>Зөрчил</th><th>Арилсан</th><th>%</th></tr></thead><tbody>`;
+  detailRows.forEach(r=>{
+    const p=Math.round(r.done/ITEMS.length*100);
+    html+=`<tr>
+      <td>${r.dt.toLocaleDateString('mn-MN',{year:'numeric',month:'2-digit',day:'2-digit'})}</td>
+      <td>${MN_WDAYS[r.dt.getDay()]}</td><td>${r.tasag}</td><td>${r.worker}</td>
+      <td><span class="badge ok">${r.done}/${ITEMS.length}</span></td>
+      <td>${r.vio>0?`<span class="badge vio">${r.vio}</span>`:'<span class="badge ok">0</span>'}</td>
+      <td>${r.vio>0?(r.open>0?`<span class="badge warn">${r.fixed}/${r.vio}</span>`:`<span class="badge fixed">${r.fixed}/${r.vio} ✓</span>`):'—'}</td>
+      <td>${p}%</td></tr>`;
+  });
+  html+='</tbody></table></div>';
+
+  // Violation detail with fix status
+  const allVios=[];
+  detailRows.forEach(r=>{(r.state||[]).forEach((s,i)=>{if(s.vio)allVios.push({dt:r.dt,tasag:r.tasag,item:i+1,text:s.vio,worker:s.vioWorker||'',fixed:s.fixed||false,fixNote:s.fixNote||''});});});
+  if(allVios.length){
+    const openV=allVios.filter(v=>!v.fixed);
+    html+=`<div class="rpt-section"><div class="rpt-section-title ${openV.length>0?'danger':''}">
+      Зөрчлийн дэлгэрэнгүй (${allVios.length} нийт · ${openV.length} арилаагүй)
+    </div>
+    <table class="rpt-table"><thead><tr><th>Огноо</th><th>Тасаг</th><th>№</th><th>Зүйл</th><th>Зөрчлийн тайлбар</th><th>Зөрчил гаргасан</th><th>Арилгасан эсэх</th><th>Арилгасан тэмдэглэл</th></tr></thead><tbody>`;
+    allVios.forEach(v=>{
+      const cls=!v.fixed?'danger-row':'';
+      html+=`<tr class="${cls}">
+        <td>${v.dt.toLocaleDateString('mn-MN',{year:'numeric',month:'2-digit',day:'2-digit'})}</td>
+        <td>${v.tasag}</td><td>${v.item}</td>
+        <td style="font-size:11px">${ITEMS[v.item-1]}</td>
+        <td><span class="badge vio">${v.text}</span></td>
+        <td>${v.worker?`<span style="font-size:11px;color:var(--blue-d)">👤 ${v.worker}</span>`:'—'}</td>
+        <td>${v.fixed?'<span class="badge fixed">✅ Арилсан</span>':'<span class="badge danger">⏳ Арилаагүй</span>'}</td>
+        <td style="font-size:11px">${v.fixNote||'—'}</td>
+      </tr>`;
+    });
+    html+='</tbody></table></div>';
+  }
+
+  if(Object.keys(tasagStats).length>1){
+    html+=`<div class="rpt-section"><div class="rpt-section-title">Тасгаар харьцуулалт</div>
+    <table class="rpt-table"><thead><tr><th>Тасаг</th><th>Өдөр</th><th>Хийгдсэн</th><th>Зөрчил</th><th>Арилаагүй</th><th>Дундаж %</th></tr></thead><tbody>`;
+    Object.entries(tasagStats).forEach(([tg,s])=>{
+      const avg=Math.round(s.done/(s.days*ITEMS.length)*100);
+      html+=`<tr><td>${tg}</td><td>${s.days}</td><td><span class="badge ok">${s.done}</span></td>
+      <td>${s.vio>0?`<span class="badge vio">${s.vio}</span>`:'<span class="badge ok">0</span>'}</td>
+      <td>${s.open>0?`<span class="badge danger">${s.open}</span>`:'<span class="badge ok">0</span>'}</td>
+      <td>${avg}%</td></tr>`;
+    });
+    html+='</tbody></table></div>';
+  }
+
+  html+=`<div style="margin-top:20px;padding-top:12px;border-top:0.5px solid var(--bdr);font-size:11px;color:var(--mut)">
+    Тайлан үүсгэсэн: ${new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'})}
+    &nbsp;·&nbsp; 2020 оны 02-р сарын 23-ны А/15 тоот хөдөлмөр аюулгүй ажиллагааны дотоод журмын хавсралт № 2
+  </div>`;
+  document.getElementById('rpt-body').innerHTML=html;
+}
+
+function dlReport(){
+  const yr=parseInt(document.getElementById('rpt-year').value);
+  const mo=parseInt(document.getElementById('rpt-month').value);
+  const content=document.getElementById('rpt-body').innerHTML;
+  const full=`<!DOCTYPE html><html lang="mn"><head><meta charset="UTF-8"/>
+  <title>ХАБЭА тайлан ${yr}-${mo+1}</title>
+  <style>body{font-family:'Segoe UI',sans-serif;padding:24px;color:#1a2040;font-size:12px}
+  .rpt-head{margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #0C447C}
+  .rpt-title{font-size:16px;font-weight:700;color:#0C447C;margin-bottom:4px}
+  .rpt-meta{font-size:12px;color:#5a6b8f}
+  .rpt-summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+  .rpt-stat{background:#f4f7fc;border:1px solid #dde3ee;border-radius:8px;padding:10px 12px}
+  .rpt-stat-n{font-size:20px;font-weight:700;color:#185FA5}
+  .rpt-stat-n.grn{color:#1D9E75}.rpt-stat-n.red{color:#E24B4A}.rpt-stat-n.amb{color:#BA7517}
+  .rpt-stat-l{font-size:11px;color:#5a6b8f;margin-top:2px}
+  .rpt-section{margin-bottom:18px}
+  .rpt-section-title{font-size:11px;font-weight:700;color:#5a6b8f;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #dde3ee}
+  .rpt-section-title.warn{color:#633806}.rpt-section-title.danger{color:#A32D2D}
+  table{width:100%;border-collapse:collapse;font-size:11px}
+  th{background:#f0f5ff;color:#0C447C;padding:6px 8px;text-align:left;border:1px solid #c0cfe8;font-weight:600}
+  td{padding:5px 8px;border:1px solid #dde3ee;vertical-align:top}
+  tr:nth-child(even) td{background:#f4f7fc}
+  tr.warn-row td{background:#FAEEDA}
+  tr.danger-row td{background:#FCEBEB}
+  .badge{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+  .badge.ok{background:#e1f5ee;color:#0f6e56}.badge.vio{background:#FCEBEB;color:#A32D2D}
+  .badge.fixed{background:#e1f5ee;color:#0f6e56}.badge.warn{background:#FAEEDA;color:#633806}
+  .badge.danger{background:#FCEBEB;color:#A32D2D;font-weight:700}
+  .worker-warn-card{background:#FAEEDA;border:1px solid #FAC775;border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+  .worker-warn-name{font-size:13px;font-weight:700;color:#633806}
+  .worker-warn-detail{font-size:12px;color:#412402;margin-top:3px}
+  .worker-danger-card{background:#FCEBEB;border:1px solid #F09595;border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+  .worker-danger-name{font-size:13px;font-weight:700;color:#A32D2D}
+  .worker-danger-detail{font-size:12px;color:#501313;margin-top:3px}
+  @media print{body{padding:10px}}</style></head><body>${content}</body></html>`;
+  const blob=new Blob([full],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ХАБЭА_тайлан_'+yr+'_'+(mo+1)+'.html';
+  a.click();
+}
+
+// ── AUTH (PIN only) ──
+const DEFAULT_PIN='9761';
+
+function hashPw(pw){
+  let h=0;
+  for(let i=0;i<pw.length;i++){h=((h<<5)-h)+pw.charCodeAt(i);h|=0;}
+  return 'h'+Math.abs(h).toString(36)+'x'+(pw.length*7).toString(36);
+}
+function getStoredPin(){
+  return localStorage.getItem('habea_pin')||hashPw(DEFAULT_PIN);
+}
+function getSession(){
+  try{ return JSON.parse(sessionStorage.getItem('habea_sess')||'null'); }catch(e){ return null; }
+}
+function setSession(){ sessionStorage.setItem('habea_sess',JSON.stringify({at:Date.now()})); }
+function clearSession(){ sessionStorage.removeItem('habea_sess'); }
+
+function doLogin(){
+  const p=(document.getElementById('li-pass').value||'').trim();
+  if(!p){ showLoginErr('Нууц дугаар оруулна уу.'); return; }
+  if(hashPw(p)!==getStoredPin()){ showLoginErr('Нууц дугаар буруу байна. Дахин оролдоно уу.'); return; }
+  document.getElementById('li-err').className='login-err';
+  setSession();
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('li-pass').value='';
+  bootApp();
+}
+function showLoginErr(msg){
+  const e=document.getElementById('li-err');
+  e.textContent=msg; e.className='login-err show';
+}
+function doLogout(){
+  if(!confirm('Системээс гарах уу?'))return;
+  clearSession();
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('li-pass').value='';
+  document.getElementById('li-err').className='login-err';
+}
+function openChpw(){
+  document.getElementById('cpw-old').value='';
+  document.getElementById('cpw-new1').value='';
+  document.getElementById('cpw-new2').value='';
+  document.getElementById('cpw-status').className='chpw-status';
+  document.getElementById('modal-chpw').classList.add('open');
+  setTimeout(()=>document.getElementById('cpw-old').focus(),80);
+}
+function closeChpw(){ document.getElementById('modal-chpw').classList.remove('open'); }
+function doChangePw(){
+  const old=(document.getElementById('cpw-old').value||'').trim();
+  const n1=(document.getElementById('cpw-new1').value||'').trim();
+  const n2=(document.getElementById('cpw-new2').value||'').trim();
+  if(!old||!n1||!n2){ showChpwStatus('err','Бүх талбарыг бөглөнө үү.'); return; }
+  if(hashPw(old)!==getStoredPin()){ showChpwStatus('err','Одоогийн нууц дугаар буруу байна.'); return; }
+  if(n1.length<4){ showChpwStatus('err','Шинэ нууц дугаар дор хаяж 4 оронтой байх ёстой.'); return; }
+  if(n1!==n2){ showChpwStatus('err','Шинэ нууц дугаар таарахгүй байна.'); return; }
+  if(n1===old){ showChpwStatus('err','Шинэ нууц дугаар өмнөхтэй ижил байна.'); return; }
+  localStorage.setItem('habea_pin',hashPw(n1));
+  showChpwStatus('ok','✅ Нууц дугаар амжилттай солигдлоо!');
+  setTimeout(()=>closeChpw(),1800);
+}
+function showChpwStatus(type,txt){
+  const el=document.getElementById('cpw-status');
+  el.className='chpw-status '+type; el.textContent=txt;
+}
+function bootApp(){
+  if(cfg.url)setSyncBadge('ok','Sheets холбогдсон');
+  else setSyncBadge('','Тохиргоо хийнэ үү');
+  loadDay(new Date());
+}
+// ── init ──
+(function(){
+  if(!localStorage.getItem('habea_pin')) localStorage.setItem('habea_pin',hashPw(DEFAULT_PIN));
+  if(getSession()){
+    document.getElementById('login-screen').classList.add('hidden');
+    bootApp();
+  } else {
+    setTimeout(()=>document.getElementById('li-pass').focus(),100);
+  }
+})();
+</script>
+</body>
+</html>
