@@ -267,6 +267,24 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   .main{flex:1;overflow:hidden}
 }
 
+
+/* ── SIGNATURE ── */
+.sig-wrap{margin-top:8px}
+.sig-label{font-size:11px;font-weight:600;color:var(--mut);margin-bottom:4px}
+.sig-canvas-wrap{
+  border:0.5px solid var(--bdr);border-radius:6px;
+  background:#fff;overflow:hidden;position:relative;
+  touch-action:none;
+}
+.sig-canvas{display:block;cursor:crosshair;width:100%;height:90px}
+.sig-actions{display:flex;gap:6px;margin-top:5px;align-items:center}
+.sig-clear{font-size:11px;padding:4px 10px;background:none;border:0.5px solid var(--bdr);
+  border-radius:5px;cursor:pointer;color:var(--mut)}
+.sig-clear:hover{background:var(--surf2);color:var(--ink)}
+.sig-hint{font-size:11px;color:var(--mut);font-style:italic;flex:1}
+.sig-done-wrap{margin-top:6px}
+.sig-img{max-width:100%;border-radius:6px;border:0.5px solid var(--bdr-grn);background:#fff;display:block}
+
 @media print{
   .modal-hdr-right,.modal-close,button,.hdr,.sidebar,.date-nav,.top-bar,.vlog-section{display:none!important}
   .modal{width:100%;max-width:100%;max-height:none;border:none}
@@ -576,7 +594,7 @@ let localLog = JSON.parse(localStorage.getItem('habea_log')||'{}');
 // ── state ──
 let tasag="", active=0;
 let curDate=new Date(); curDate.setHours(0,0,0,0);
-let state=ITEMS.map(()=>({done:false,vio:"",vworker:"",vfixed:false,vfixnote:"",form:false,draft:""}));
+let state=ITEMS.map(()=>({done:false,vio:"",vworker:"",vfixed:false,vfixnote:"",sig:"",form:false,draft:""}));
 
 function dateKey(d){return d.toISOString().slice(0,10)}
 function todayKey(){const t=new Date();t.setHours(0,0,0,0);return dateKey(t)}
@@ -620,8 +638,8 @@ async function loadFromSheets(d){
     if(res.found){
       tasag=res.tasag||"";
       document.getElementById('inp-worker').value=res.worker||"";
-      state=ITEMS.map((_,i)=>({done:res.state[i]?.done||false,vio:res.state[i]?.vio||"",vworker:res.state[i]?.vworker||"",vfixed:res.state[i]?.vfixed||false,vfixnote:res.state[i]?.vfixnote||"",form:false,draft:""}));
-      localLog[k]={tasag,worker:res.worker||"",state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||'',vfixed:s.vfixed||false,vfixnote:s.vfixnote||''}))};
+      state=ITEMS.map((_,i)=>({done:res.state[i]?.done||false,vio:res.state[i]?.vio||"",vworker:res.state[i]?.vworker||"",vfixed:res.state[i]?.vfixed||false,vfixnote:res.state[i]?.vfixnote||"",sig:res.state[i]?.sig||"",form:false,draft:""}));
+      localLog[k]={tasag,worker:res.worker||"",state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||'',vfixed:s.vfixed||false,vfixnote:s.vfixnote||'',sig:s.sig||''}))};
       localStorage.setItem('habea_log',JSON.stringify(localLog));
       setSyncBadge('ok','Sheets-с уншлаа');
     } else {
@@ -639,7 +657,7 @@ function loadFromLocal(d){
   if(saved){
     tasag=saved.tasag||"";
     document.getElementById('inp-worker').value=saved.worker||"";
-    state=ITEMS.map((_,i)=>({done:saved.state[i]?.done||false,vio:saved.state[i]?.vio||"",vworker:saved.state[i]?.vworker||"",vfixed:saved.state[i]?.vfixed||false,vfixnote:saved.state[i]?.vfixnote||"",form:false,draft:""}));
+    state=ITEMS.map((_,i)=>({done:saved.state[i]?.done||false,vio:saved.state[i]?.vio||"",vworker:saved.state[i]?.vworker||"",vfixed:saved.state[i]?.vfixed||false,vfixnote:saved.state[i]?.vfixnote||"",sig:saved.state[i]?.sig||"",form:false,draft:""}));
   } else {
     tasag=""; document.getElementById('inp-worker').value="";
     state=ITEMS.map(()=>({done:false,vio:"",form:false,draft:""}));
@@ -651,7 +669,7 @@ async function saveDay(){
   btn.disabled=true; btn.textContent='…';
   const k=dateKey(curDate);
   const worker=document.getElementById('inp-worker').value||"";
-  const payload={action:'save',dateKey:k,tasag,worker,state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||'',vfixed:s.vfixed||false,vfixnote:s.vfixnote||''}))};
+  const payload={action:'save',dateKey:k,tasag,worker,state:state.map(s=>({done:s.done,vio:s.vio,vworker:s.vworker||'',vfixed:s.vfixed||false,vfixnote:s.vfixnote||'',sig:s.sig||''}))};
   // always save locally first
   localLog[k]={tasag,worker,state:payload.state,savedAt:new Date().toISOString()};
   localStorage.setItem('habea_log',JSON.stringify(localLog));
@@ -741,7 +759,7 @@ function render(){
         <span class="ck-txt">${ITEMS[i]}</span>
         <button class="vio-btn" onclick="openForm(${i})">⚠ Зөрчил</button>
       </div>
-      ${s.vio?`<div class="vio-tag" style="background:${s.vfixed?'var(--grn-l)':' var(--red-l)'};color:${s.vfixed?'var(--grn-d)':' var(--red-d)'};">${s.vfixed?'✅':'🔴'} ${s.vio}${s.vworker?` · 👤 ${s.vworker}`:''}${s.vfixed&&s.vfixnote?` · ✔ ${s.vfixnote}`:''}</div>`:''}
+      ${s.vio?`<div class="vio-tag" style="background:${s.vfixed?'var(--grn-l)':'var(--red-l)'};color:${s.vfixed?'var(--grn-d)':'var(--red-d)'};">${s.vfixed?'✅':'🔴'} ${s.vio}${s.vworker?` · 👤 ${s.vworker}`:''}${s.vfixed&&s.vfixnote?` · ✔ ${s.vfixnote}`:''}${s.sig?`<br><img src="${s.sig}" style="height:32px;margin-top:4px;border-radius:4px;border:0.5px solid rgba(0,0,0,.1)">`:'' }</div>`:''}
       ${s.form?`<div class="vio-form">
         <div style="font-size:11px;font-weight:600;color:var(--mut);margin-bottom:4px">Зөрчлийн тайлбар</div>
         <textarea id="vf-${i}" rows="2" placeholder="Дэлгэрэнгүй тайлбар..."
@@ -764,6 +782,25 @@ function render(){
           style="width:100%;font-size:12px;padding:6px 9px;border:0.5px solid var(--bdr);border-radius:6px;background:var(--surf);color:var(--ink);outline:none;box-sizing:border-box"
           onfocus="this.style.borderColor='var(--grn)'" onblur="this.style.borderColor='var(--bdr)'"/>
         `:''}
+        <div class="sig-wrap">
+          <div class="sig-label">Гарын үсэг</div>
+          ${s.sig?`
+          <div class="sig-done-wrap">
+            <img class="sig-img" src="${s.sig}" style="height:60px;object-fit:contain"/>
+            <div class="sig-actions"><button class="sig-clear" onclick="clearSig(${i})">✕ Арилгах</button><span class="sig-hint">Гарын үсэг хадгалагдсан</span></div>
+          </div>
+          `:`
+          <div class="sig-canvas-wrap">
+            <canvas class="sig-canvas" id="sigc-${i}" height="90"
+              onmousedown="sigStart(event,${i})" onmousemove="sigMove(event,${i})" onmouseup="sigEnd(${i})" onmouseleave="sigEnd(${i})"
+              ontouchstart="sigStart(event,${i})" ontouchmove="sigMove(event,${i})" ontouchend="sigEnd(${i})"></canvas>
+          </div>
+          <div class="sig-actions">
+            <button class="sig-clear" onclick="sigClear(${i})">↺ Цэвэрлэх</button>
+            <span class="sig-hint">Хуруу/хулганаар зурна уу</span>
+          </div>
+          `}
+        </div>
         <div class="vf-btns" style="margin-top:10px">
           <button class="btn-sm primary" onclick="saveVio(${i})">Хадгалах</button>
           <button class="btn-sm" onclick="closeForm(${i})">Болих</button>
@@ -781,7 +818,7 @@ function render(){
     ?vs.map(v=>`<div class="vl-item"><div class="vl-n">${v.i}. ${ITEMS[v.i-1].substring(0,38)}</div><div class="vl-t">${v.text}</div></div>`).join('')
     :'<div class="empty-log">Одоогоор зөрчил бүртгэгдээгүй байна</div>';
 
-  setTimeout(()=>{const t=document.getElementById('vf-'+active);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}},40);
+  setTimeout(()=>{const t=document.getElementById('vf-'+active);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length);}initSigCanvas(active);},40);
   updateMobUI();
 }
 
@@ -811,6 +848,7 @@ function saveVio(i){
   if(w)state[i].vworker=w.value.trim();
   const n=document.getElementById('vfn-'+i);
   if(n)state[i].vfixnote=n.value.trim();
+  if(!state[i].sig){const sd=getSigData(i);if(sd)state[i].sig=sd;}
   state[i].form=false;render();checkVioWarning();
 }
 function clearVio(i){state[i].vio='';state[i].form=false;render();}
@@ -1011,6 +1049,60 @@ function dlReport(){
   a.click();
 }
 
+// ── SIGNATURE ──
+const _sigState={drawing:false,idx:-1};
+function _getSigCanvas(i){return document.getElementById('sigc-'+i);}
+function _getSigCtx(i){const cv=_getSigCanvas(i);return cv?cv.getContext('2d'):null;}
+function _sigPos(e,cv){
+  const r=cv.getBoundingClientRect();
+  const src=e.touches?e.touches[0]:e;
+  return {x:(src.clientX-r.left)*(cv.width/r.width), y:(src.clientY-r.top)*(cv.height/r.height)};
+}
+function sigStart(e,i){
+  e.preventDefault();
+  const cv=_getSigCanvas(i);if(!cv)return;
+  const ctx=_getSigCtx(i);
+  const pos=_sigPos(e,cv);
+  ctx.beginPath();ctx.moveTo(pos.x,pos.y);
+  ctx.strokeStyle='#1a2040';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+  _sigState.drawing=true;_sigState.idx=i;
+}
+function sigMove(e,i){
+  e.preventDefault();
+  if(!_sigState.drawing||_sigState.idx!==i)return;
+  const cv=_getSigCanvas(i);if(!cv)return;
+  const ctx=_getSigCtx(i);
+  const pos=_sigPos(e,cv);
+  ctx.lineTo(pos.x,pos.y);ctx.stroke();
+}
+function sigEnd(i){
+  if(!_sigState.drawing)return;
+  _sigState.drawing=false;
+}
+function sigClear(i){
+  const cv=_getSigCanvas(i);if(!cv)return;
+  cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+}
+function clearSig(i){
+  state[i].sig='';render();
+}
+function getSigData(i){
+  const cv=_getSigCanvas(i);if(!cv)return '';
+  // Check if canvas is blank
+  const ctx=cv.getContext('2d');
+  const d=ctx.getImageData(0,0,cv.width,cv.height).data;
+  const blank=d.every(v=>v===0||v===255);
+  if(blank)return '';
+  return cv.toDataURL('image/png');
+}
+// init canvas size after render
+function initSigCanvas(i){
+  const cv=_getSigCanvas(i);if(!cv)return;
+  const w=cv.parentElement.offsetWidth;
+  if(w>0&&cv.width!==w){
+    cv.width=w;cv.height=90;
+  }
+}
 // ── LOGIN ──
 const LOGIN_USER = 'ХАБЭА-н ажилтан';
 const LOGIN_PASS = '9761';
